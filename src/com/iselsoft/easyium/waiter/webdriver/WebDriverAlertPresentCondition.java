@@ -1,7 +1,6 @@
 package com.iselsoft.easyium.waiter.webdriver;
 
 import com.iselsoft.easyium.WebDriver;
-import com.iselsoft.easyium.waiter.Condition;
 import org.openqa.selenium.NoAlertPresentException;
 
 public class WebDriverAlertPresentCondition extends WebDriverCondition {

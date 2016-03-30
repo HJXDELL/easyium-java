@@ -17,7 +17,7 @@ public class DynamicElement extends Element {
     }
 
     @Override
-    protected void refreshMe() throws EasyiumException {
+    protected void refresh() throws EasyiumException {
         if (locator == null) {
             throw new NotPersistException("persist() was not invoked so this Element cannot auto-refresh.", this);
         }

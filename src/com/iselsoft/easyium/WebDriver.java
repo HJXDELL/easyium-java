@@ -1,34 +1,43 @@
 package com.iselsoft.easyium;
 
+import com.iselsoft.easyium.exceptions.EasyiumException;
 import com.iselsoft.easyium.waiter.webdriver.WebDriverWaitFor;
+import org.openqa.selenium.Capabilities;
+import org.openqa.selenium.HasCapabilities;
+import org.openqa.selenium.JavascriptExecutor;
 import org.openqa.selenium.SearchContext;
+import org.openqa.selenium.WebDriver.Options;
+import org.openqa.selenium.WebDriver.TargetLocator;
+import org.openqa.selenium.WebDriver.Navigation;
+import org.openqa.selenium.interactions.HasInputDevices;
+import org.openqa.selenium.interactions.Keyboard;
+import org.openqa.selenium.interactions.Mouse;
+
+import java.util.Set;
+import java.util.concurrent.TimeUnit;
 
 public abstract class WebDriver<T extends org.openqa.selenium.WebDriver> extends Context {
     public final static long DEFAULT_WAIT_INTERVAL = 1000;
     public final static long DEFAULT_WAIT_TIMEOUT = 30000;
+    public final static long DEFAULT_PAGE_LOAD_TIMEOUT = 30000;
+    public final static long DEFAULT_SCRIPT_TIMEOUT = 30000;
     
-    protected T seleniumWebDriver;
-
-
-    public WebDriver() {
-        this(DEFAULT_WAIT_INTERVAL, DEFAULT_WAIT_TIMEOUT);
-    }
-
-    public WebDriver(long waitTimeout) {
-        this(DEFAULT_WAIT_INTERVAL, waitTimeout);
-    }
-
-    public WebDriver(long waitInterval, long waitTimeout) {
+    protected final T seleniumWebDriver;
+    
+    public WebDriver(T seleniumWebDriver) {
         super();
-        setWaitInterval(waitInterval);
-        setWaitTimeout(waitTimeout);
+        this.seleniumWebDriver = seleniumWebDriver;
+        setWaitInterval(DEFAULT_WAIT_INTERVAL);
+        setWaitTimeout(DEFAULT_WAIT_TIMEOUT);
+        manage().timeouts().pageLoadTimeout(DEFAULT_PAGE_LOAD_TIMEOUT, TimeUnit.MILLISECONDS);
+        manage().timeouts().setScriptTimeout(DEFAULT_SCRIPT_TIMEOUT, TimeUnit.MILLISECONDS);
     }
     
     @Override
     public WebDriver getWebDriver() {
         return this;
     }
-        
+    
     @Override
     protected SearchContext seleniumContext() {
         return seleniumWebDriver;
@@ -39,7 +48,7 @@ public abstract class WebDriver<T extends org.openqa.selenium.WebDriver> extends
     }
     
     @Override
-    protected void refreshMe() {} // do nothing
+    protected void refresh() {} // do nothing
 
     @Override
     public void persist() {} // do nothing
@@ -54,5 +63,104 @@ public abstract class WebDriver<T extends org.openqa.selenium.WebDriver> extends
     
     public WebDriverWaitFor waitFor(long interval, long timeout) {
         return new WebDriverWaitFor(this, interval, timeout);
+    }
+    
+    public void get(String url) {
+        seleniumWebDriver.get(url);
+    }
+    
+    public void open(String url) {
+        get(url);
+    }
+    
+    public String getCurrentUrl() {
+        return seleniumWebDriver.getCurrentUrl();
+    }
+    
+    public String getTitle() {
+        return seleniumWebDriver.getTitle();
+    }
+    
+    public String getPageSource() {
+        return seleniumWebDriver.getPageSource();
+    }
+    
+    public void close_current_window() {
+        seleniumWebDriver.close();
+    }
+    
+    public void close_window(String nameOrHandle) {
+        if (nameOrHandle.equals(getCurrentWindowHandle())) {
+            close_current_window();
+        } else {
+            String currentWindowHandle = getCurrentWindowHandle();
+            switchTo().window(nameOrHandle);
+            close_current_window();
+            switchTo().window(currentWindowHandle);
+        }
+    }
+    
+    public String getCurrentWindowHandle() {
+        return seleniumWebDriver.getWindowHandle();
+    }
+    
+    public Set<String> getWindowHandles() {
+        return seleniumWebDriver.getWindowHandles();
+    }
+    
+    public Options manage() {
+        return seleniumWebDriver.manage();
+    }
+    
+    public TargetLocator switchTo() {
+        return seleniumWebDriver.switchTo();
+    }
+    
+    public Navigation navigate() {
+        return seleniumWebDriver.navigate();
+    }
+    
+    public Object executeScript(String script, Object... args) throws EasyiumException, InterruptedException {
+        Object[] convertedArgs = new Object[args.length];
+        for (int i = 0; i < args.length; i++) {
+            if (args[i] instanceof Element) {
+                Element element = (Element) args[i];
+                element.waitFor().exists();
+                convertedArgs[i] = element.seleniumElement();
+            } else {
+                convertedArgs[i] = args[i];
+            }
+        }
+        return ((JavascriptExecutor) seleniumWebDriver).executeScript(script, convertedArgs);
+    }
+
+    public Object executeAsyncScript(String script, Object... args) throws EasyiumException, InterruptedException {
+        Object[] convertedArgs = new Object[args.length];
+        for (int i = 0; i < args.length; i++) {
+            if (args[i] instanceof Element) {
+                Element element = (Element) args[i];
+                element.waitFor().exists();
+                convertedArgs[i] = element.seleniumElement();
+            } else {
+                convertedArgs[i] = args[i];
+            }
+        }
+        return ((JavascriptExecutor) seleniumWebDriver).executeAsyncScript(script, convertedArgs);
+    }
+    
+    public Keyboard getKeyboard() {
+        return ((HasInputDevices) seleniumWebDriver).getKeyboard();
+    }
+    
+    public Mouse getMouse() {
+        return ((HasInputDevices) seleniumWebDriver).getMouse();
+    }
+    
+    public Capabilities getCapabilities() {
+        return ((HasCapabilities) seleniumWebDriver).getCapabilities();
+    }
+    
+    public void quit() {
+        seleniumWebDriver.quit();
     }
 }

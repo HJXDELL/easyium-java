@@ -32,14 +32,14 @@ public abstract class Element extends Context{
     @Override
     protected SearchContext seleniumContext() throws EasyiumException {
         if (seleniumElement == null) {
-            refreshMe();
+            refresh();
         }
         return seleniumElement;
     }
     
     public WebElement seleniumElement() throws EasyiumException {
         if (seleniumElement == null) {
-            refreshMe();
+            refresh();
         }
         return seleniumElement;
     }

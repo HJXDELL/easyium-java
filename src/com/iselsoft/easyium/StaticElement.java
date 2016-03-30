@@ -10,7 +10,7 @@ public class StaticElement extends Element {
     }
 
     @Override
-    protected void refreshMe() throws EasyiumException {
+    protected void refresh() throws EasyiumException {
         this.seleniumElement = null;
         this.seleniumElement = getParent().findSeleniumElement(locator);
     }

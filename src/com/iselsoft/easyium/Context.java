@@ -1,10 +1,10 @@
 package com.iselsoft.easyium;
 
 import com.iselsoft.easyium.exceptions.*;
+import com.iselsoft.easyium.exceptions.NoSuchElementException;
+import com.iselsoft.easyium.exceptions.TimeoutException;
 import com.iselsoft.easyium.waiter.Waiter;
-import org.openqa.selenium.By;
-import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,7 +24,7 @@ public abstract class Context {
 
     protected abstract SearchContext seleniumContext() throws EasyiumException;
 
-    protected abstract void refreshMe() throws EasyiumException;
+    protected abstract void refresh() throws EasyiumException;
 
     public abstract void persist() throws LatePersistException;
     
@@ -62,8 +62,22 @@ public abstract class Context {
         return new Waiter(interval, timeout);
     }
 
+    public <X> X getScreenshotAs(OutputType<X> target) throws EasyiumException, InterruptedException {
+        try {
+            try {
+                return ((TakesScreenshot) seleniumContext()).getScreenshotAs(target);
+            } catch (NoSuchElementException | org.openqa.selenium.StaleElementReferenceException e) {
+                // Only Element can reach here
+                ((Element) this).waitFor().exists();
+                return ((TakesScreenshot) seleniumContext()).getScreenshotAs(target);
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+
     /**
-     * Only used by {@link com.iselsoft.easyium.Context#refreshMe}
+     * Only used by {@link com.iselsoft.easyium.Context#refresh}
      * @param locator
      * @return
      * @throws EasyiumException
@@ -74,7 +88,7 @@ public abstract class Context {
             try{
                 return seleniumContext().findElement(by);
             } catch (org.openqa.selenium.StaleElementReferenceException e) {
-                refreshMe();
+                refresh();
                 return seleniumContext().findElement(by);
             }
         } catch (org.openqa.selenium.InvalidSelectorException e) {
