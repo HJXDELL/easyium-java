@@ -34,7 +34,7 @@ public class Waiter {
             if (condition.occurred()) {
                 return;
             }
-        } 
+        }
 
         throw new TimeoutException(String.format("Timed out waiting for <%s>.", condition.toString()));
     }

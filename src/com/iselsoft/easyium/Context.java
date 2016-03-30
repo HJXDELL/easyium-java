@@ -1,6 +1,7 @@
 package com.iselsoft.easyium;
 
-import com.iselsoft.easyium.exceptions.*;
+import com.iselsoft.easyium.exceptions.EasyiumException;
+import com.iselsoft.easyium.exceptions.InvalidLocatorException;
 import com.iselsoft.easyium.exceptions.NoSuchElementException;
 import com.iselsoft.easyium.exceptions.TimeoutException;
 import com.iselsoft.easyium.waiter.Waiter;
@@ -12,57 +13,57 @@ import java.util.List;
 public abstract class Context {
     private long waitInterval;
     private long waitTimeout;
-    
+
     protected Context() {
         waitInterval = -568522662;
         waitTimeout = -568522662;
     }
-    
+
     public abstract WebDriver getWebDriver();
-    
+
     public abstract WebDriverType getWebDriverType();
 
-    protected abstract SearchContext seleniumContext() throws EasyiumException;
+    protected abstract SearchContext seleniumContext();
 
-    protected abstract void refresh() throws EasyiumException;
+    protected abstract void refresh();
 
-    public abstract void persist() throws LatePersistException;
-    
+    public abstract void persist();
+
     public long getWaitInterval() {
         if (waitInterval == -568522662) {
             return getWebDriver().getWaitInterval();
         }
         return waitInterval;
     }
-    
+
     public void setWaitInterval(long interval) {
         this.waitInterval = interval;
     }
-    
+
     public long getWaitTimeout() {
         if (waitTimeout == -568522662) {
             return getWebDriver().getWaitTimeout();
         }
         return waitTimeout;
     }
-    
+
     public void setWaitTimeout(long timeout) {
         this.waitTimeout = timeout;
     }
-    
+
     public Waiter waiter() {
         return waiter(getWaitInterval(), getWaitTimeout());
     }
-    
+
     public Waiter waiter(long timeout) {
         return waiter(getWaitInterval(), timeout);
     }
-    
+
     public Waiter waiter(long interval, long timeout) {
         return new Waiter(interval, timeout);
     }
 
-    public <X> X getScreenshotAs(OutputType<X> target) throws EasyiumException, InterruptedException {
+    public <X> X getScreenshotAs(OutputType<X> target) {
         try {
             try {
                 return ((TakesScreenshot) seleniumContext()).getScreenshotAs(target);
@@ -78,14 +79,14 @@ public abstract class Context {
 
     /**
      * Only used by {@link com.iselsoft.easyium.Context#refresh}
+     *
      * @param locator
      * @return
-     * @throws EasyiumException
      */
-    protected WebElement findSeleniumElement(String locator) throws EasyiumException {
+    protected WebElement findSeleniumElement(String locator) {
         By by = LocatorHelper.toBy(locator);
         try {
-            try{
+            try {
                 return seleniumContext().findElement(by);
             } catch (org.openqa.selenium.StaleElementReferenceException e) {
                 refresh();
@@ -100,7 +101,7 @@ public abstract class Context {
         }
     }
 
-    public boolean hasChild(String locator) throws EasyiumException, InterruptedException {
+    public boolean hasChild(String locator) {
         try {
             findElement(locator);
             return true;
@@ -108,12 +109,12 @@ public abstract class Context {
             return false;
         }
     }
-    
-    public Element findElement(String locator) throws EasyiumException, InterruptedException {
+
+    public Element findElement(String locator) {
         return findElement(locator, Identifier.id);
     }
-    
-    public Element findElement(String locator, Identifier identifier) throws EasyiumException, InterruptedException {
+
+    public Element findElement(String locator, Identifier identifier) {
         By by = LocatorHelper.toBy(locator);
         try {
             try {
@@ -134,11 +135,11 @@ public abstract class Context {
 
     /**
      * Only used by {@link com.iselsoft.easyium.Context#findElements}
+     *
      * @param locator
      * @return
-     * @throws EasyiumException
      */
-    protected List<WebElement> findSeleniumElements(String locator) throws EasyiumException, InterruptedException {
+    protected List<WebElement> findSeleniumElements(String locator) {
         By by = LocatorHelper.toBy(locator);
         try {
             try {
@@ -149,25 +150,25 @@ public abstract class Context {
                 return seleniumContext().findElements(by);
             }
         } catch (org.openqa.selenium.InvalidSelectorException e) {
-            throw new InvalidLocatorException(String.format("The value of locator <%s> is not a valid expression.", locator) ,this);
+            throw new InvalidLocatorException(String.format("The value of locator <%s> is not a valid expression.", locator), this);
         } catch (org.openqa.selenium.WebDriverException e) {
             throw new EasyiumException(e.getMessage(), this);
         }
     }
-    
-    public List<Element> findElements(String locator) throws EasyiumException, InterruptedException {
+
+    public List<Element> findElements(String locator) {
         return findElements(locator, Identifier.id, 0);
     }
 
-    public List<Element> findElements(String locator, int atLeast) throws EasyiumException, InterruptedException {
+    public List<Element> findElements(String locator, int atLeast) {
         return findElements(locator, Identifier.id, atLeast);
     }
 
-    public List<Element> findElements(String locator, Identifier identifier) throws EasyiumException, InterruptedException {
+    public List<Element> findElements(String locator, Identifier identifier) {
         return findElements(locator, identifier, 0);
     }
-    
-    public List<Element> findElements(String locator, Identifier identifier, int atLeast) throws EasyiumException, InterruptedException {
+
+    public List<Element> findElements(String locator, Identifier identifier, int atLeast) {
         List<Element> elements = new ArrayList<>();
 
         long startTime = System.currentTimeMillis();
@@ -179,9 +180,13 @@ public abstract class Context {
             }
             return elements;
         }
-        
+
         while ((System.currentTimeMillis() - startTime) <= getWaitTimeout()) {
-            Thread.sleep(getWaitInterval());
+            try {
+                Thread.sleep(getWaitInterval());
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             seleniumElements = findSeleniumElements(locator);
             if (seleniumElements.size() >= atLeast) {
                 for (WebElement seleniumElement : seleniumElements) {

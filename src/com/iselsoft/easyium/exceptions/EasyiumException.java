@@ -2,7 +2,7 @@ package com.iselsoft.easyium.exceptions;
 
 import com.iselsoft.easyium.Context;
 
-public class EasyiumException extends Exception {
+public class EasyiumException extends RuntimeException {
     protected String message;
     protected Context context;
 

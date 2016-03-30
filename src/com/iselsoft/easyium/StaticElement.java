@@ -1,8 +1,5 @@
 package com.iselsoft.easyium;
 
-import com.iselsoft.easyium.exceptions.EasyiumException;
-import com.iselsoft.easyium.exceptions.LatePersistException;
-
 public class StaticElement extends Element {
     protected StaticElement(Context parent, String locator) {
         super(parent);
@@ -10,16 +7,16 @@ public class StaticElement extends Element {
     }
 
     @Override
-    protected void refresh() throws EasyiumException {
+    protected void refresh() {
         this.seleniumElement = null;
         this.seleniumElement = getParent().findSeleniumElement(locator);
     }
 
     @Override
-    public void persist() throws LatePersistException {
+    public void persist() {
         getParent().persist();
     }
-    
+
     @Override
     public String toString() {
         if (seleniumElement == null) {

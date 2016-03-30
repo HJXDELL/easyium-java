@@ -1,6 +1,5 @@
 package com.iselsoft.easyium;
 
-import com.iselsoft.easyium.exceptions.EasyiumException;
 import com.iselsoft.easyium.exceptions.LatePersistException;
 import com.iselsoft.easyium.exceptions.NotPersistException;
 import org.openqa.selenium.WebElement;
@@ -17,7 +16,7 @@ public class DynamicElement extends Element {
     }
 
     @Override
-    protected void refresh() throws EasyiumException {
+    protected void refresh() {
         if (locator == null) {
             throw new NotPersistException("persist() was not invoked so this Element cannot auto-refresh.", this);
         }
@@ -26,7 +25,7 @@ public class DynamicElement extends Element {
     }
 
     @Override
-    public void persist() throws LatePersistException {
+    public void persist() {
         getParent().persist();
 
         try {

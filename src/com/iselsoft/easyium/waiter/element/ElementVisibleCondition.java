@@ -1,16 +1,15 @@
 package com.iselsoft.easyium.waiter.element;
 
 import com.iselsoft.easyium.Element;
-import com.iselsoft.easyium.exceptions.EasyiumException;
 
 public class ElementVisibleCondition extends ElementCondition {
-    
+
     protected ElementVisibleCondition(Element element) {
         super(element);
     }
 
     @Override
-    public boolean occurred() throws EasyiumException{
+    public boolean occurred() {
         return element.isDisplayed();
     }
 

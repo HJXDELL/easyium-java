@@ -1,7 +1,6 @@
 package com.iselsoft.easyium.waiter.webdriver;
 
 import com.iselsoft.easyium.WebDriver;
-import com.iselsoft.easyium.exceptions.EasyiumException;
 import com.iselsoft.easyium.exceptions.WebDriverTimeoutException;
 
 public class WebDriverWaitFor {
@@ -9,15 +8,15 @@ public class WebDriverWaitFor {
     protected final long interval;
     protected final long timeout;
     protected boolean desiredOccurrence;
-    
+
     public WebDriverWaitFor(WebDriver webDriver, long interval, long timeout) {
         this.webDriver = webDriver;
         this.interval = interval;
         this.timeout = timeout;
         this.desiredOccurrence = true;
     }
-    
-    protected void waitFor(WebDriverCondition condition, long interval, long timeout) throws EasyiumException, InterruptedException {
+
+    protected void waitFor(WebDriverCondition condition, long interval, long timeout) {
         long startTime = System.currentTimeMillis();
 
         if (condition.occurred() == desiredOccurrence) {
@@ -25,7 +24,11 @@ public class WebDriverWaitFor {
         }
 
         while ((System.currentTimeMillis() - startTime) <= timeout) {
-            Thread.sleep(interval);
+            try {
+                Thread.sleep(interval);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
             if (condition.occurred() == desiredOccurrence) {
                 return;
             }
@@ -38,18 +41,18 @@ public class WebDriverWaitFor {
         desiredOccurrence = !desiredOccurrence;
         return this;
     }
-    
-    public void alertPresent() throws EasyiumException, InterruptedException {
+
+    public void alertPresent() {
         waitFor(new WebDriverAlertPresentCondition(webDriver), interval, timeout);
     }
-    
-    public void textPresent(String text) throws EasyiumException, InterruptedException {
+
+    public void textPresent(String text) {
         waitFor(new WebDriverTextPresentCondition(webDriver, text), interval, timeout);
     }
     
-    public void urlEquals(String url) throws EasyiumException, InterruptedException {
+    public void urlEquals(String url) {
         waitFor(new WebDriverURLEqualsConditioin(webDriver, url), interval, timeout);
     }
-    
+
     // todo: activity present
 }

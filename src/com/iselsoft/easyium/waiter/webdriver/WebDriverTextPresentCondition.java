@@ -1,7 +1,6 @@
 package com.iselsoft.easyium.waiter.webdriver;
 
 import com.iselsoft.easyium.WebDriver;
-import com.iselsoft.easyium.exceptions.EasyiumException;
 import org.openqa.selenium.By;
 
 public class WebDriverTextPresentCondition extends WebDriverCondition {
@@ -13,7 +12,7 @@ public class WebDriverTextPresentCondition extends WebDriverCondition {
     }
 
     @Override
-    public boolean occurred() throws EasyiumException {
+    public boolean occurred() {
         try {
             webDriver.seleniumWebDriver().findElement(By.xpath(String.format("//*[contains(., '%s')]", text)));
             return true;

@@ -1,7 +1,6 @@
 package com.iselsoft.easyium.waiter.element;
 
 import com.iselsoft.easyium.Element;
-import com.iselsoft.easyium.exceptions.EasyiumException;
 
 public class ElementAttributeEqualsCondition extends ElementCondition {
     private final String attribute;
@@ -14,7 +13,7 @@ public class ElementAttributeEqualsCondition extends ElementCondition {
     }
 
     @Override
-    public boolean occurred() throws EasyiumException {
+    public boolean occurred() {
         return element.seleniumElement().getAttribute(attribute).equals(value);
     }
 

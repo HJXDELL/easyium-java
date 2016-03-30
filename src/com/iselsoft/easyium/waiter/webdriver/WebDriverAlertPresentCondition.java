@@ -4,7 +4,7 @@ import com.iselsoft.easyium.WebDriver;
 import org.openqa.selenium.NoAlertPresentException;
 
 public class WebDriverAlertPresentCondition extends WebDriverCondition {
-    
+
     public WebDriverAlertPresentCondition(WebDriver webDriver) {
         super(webDriver);
     }
