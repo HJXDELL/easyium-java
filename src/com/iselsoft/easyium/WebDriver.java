@@ -11,6 +11,7 @@ import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.interactions.HasInputDevices;
 import org.openqa.selenium.interactions.Keyboard;
 import org.openqa.selenium.interactions.Mouse;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -163,5 +164,10 @@ public abstract class WebDriver extends Context {
 
     public void quit() {
         seleniumWebDriver.quit();
+    }
+    
+    @Override
+    public String toString() {
+        return String.format("WebDriver <WebDriverType: %s><SessionId: %s>",getWebDriverType(), ((RemoteWebDriver) seleniumWebDriver).getSessionId());
     }
 }

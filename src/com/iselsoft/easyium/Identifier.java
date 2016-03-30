@@ -22,10 +22,10 @@ public interface Identifier {
         }
     };
 
-    public static Identifier linkText = new Identifier() {
+    public static Identifier text = new Identifier() {
         @Override
         public String identify(Element element) {
-            return "link=" + element.getText();
+            return String.format("xpath=.//*[.='%s')]", element.getText());
         }
     };
 

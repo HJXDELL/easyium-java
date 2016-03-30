@@ -1,5 +1,7 @@
 package com.iselsoft.easyium;
 
+import org.openqa.selenium.internal.HasIdentity;
+
 public class StaticElement extends Element {
     protected StaticElement(Context parent, String locator) {
         super(parent);
@@ -24,6 +26,6 @@ public class StaticElement extends Element {
                     getParent(), locator);
         }
         return String.format("%s\n|- StaticElement <SeleniumElementId: %s><Locator: %s>",
-                getParent(), seleniumElement.hashCode(), locator);
+                getParent(), ((HasIdentity) seleniumElement).getId(), locator);
     }
 }

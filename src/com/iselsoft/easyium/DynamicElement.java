@@ -3,6 +3,7 @@ package com.iselsoft.easyium;
 import com.iselsoft.easyium.exceptions.LatePersistException;
 import com.iselsoft.easyium.exceptions.NotPersistException;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.internal.HasIdentity;
 
 public class DynamicElement extends Element {
     private final String foundBy;
@@ -44,6 +45,6 @@ public class DynamicElement extends Element {
                     getParent(), locator, foundBy);
         }
         return String.format("%s\n|- DynamicElement <SeleniumElementId: %s><Locator: %s><FoundBy: %s>",
-                getParent(), seleniumElement.hashCode(), locator, foundBy);
+                getParent(), ((HasIdentity) seleniumElement).getId(), locator, foundBy);
     }
 }
