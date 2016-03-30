@@ -8,9 +8,12 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver.Navigation;
 import org.openqa.selenium.WebDriver.Options;
 import org.openqa.selenium.WebDriver.TargetLocator;
+import org.openqa.selenium.html5.Location;
+import org.openqa.selenium.html5.LocationContext;
 import org.openqa.selenium.interactions.HasInputDevices;
 import org.openqa.selenium.interactions.Keyboard;
 import org.openqa.selenium.interactions.Mouse;
+import org.openqa.selenium.internal.Killable;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.util.Set;
@@ -169,5 +172,23 @@ public abstract class WebDriver extends Context {
     @Override
     public String toString() {
         return String.format("WebDriver <WebDriverType: %s><SessionId: %s>",getWebDriverType(), ((RemoteWebDriver) seleniumWebDriver).getSessionId());
+    }
+    
+    public void kill() {
+        checkSupport(WebDriverType.FIREFOX);
+        
+        ((Killable) seleniumWebDriver).kill();
+    }
+
+    public Location getLocation() {
+        checkSupport(WebDriverType.CHROME);
+
+        return ((LocationContext) seleniumWebDriver).location();
+    }
+
+    public void setLocation(Location location) {
+        checkSupport(WebDriverType.CHROME);
+
+        ((LocationContext) seleniumWebDriver).setLocation(location);
     }
 }

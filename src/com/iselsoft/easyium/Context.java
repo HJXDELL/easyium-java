@@ -4,6 +4,7 @@ import com.iselsoft.easyium.exceptions.EasyiumException;
 import com.iselsoft.easyium.exceptions.InvalidLocatorException;
 import com.iselsoft.easyium.exceptions.NoSuchElementException;
 import com.iselsoft.easyium.exceptions.TimeoutException;
+import com.iselsoft.easyium.exceptions.UnsupportedOperationException;
 import com.iselsoft.easyium.waiter.Waiter;
 import org.openqa.selenium.*;
 
@@ -75,6 +76,16 @@ public abstract class Context {
         } catch (WebDriverException e) {
             throw new EasyiumException(e.getMessage(), this);
         }
+    }
+
+    protected void checkSupport(WebDriverType... webDriverTypes) {
+        WebDriverType currentWebDriverType = getWebDriverType();
+        for (WebDriverType webDriverType : webDriverTypes) {
+            if (webDriverType == currentWebDriverType) {
+                return;
+            }
+        }
+        throw new UnsupportedOperationException(String.format("Operation is not supported by web driver [%s].", currentWebDriverType));
     }
 
     /**
