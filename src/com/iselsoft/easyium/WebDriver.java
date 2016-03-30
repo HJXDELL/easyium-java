@@ -8,8 +8,7 @@ import org.openqa.selenium.SearchContext;
 import org.openqa.selenium.WebDriver.Navigation;
 import org.openqa.selenium.WebDriver.Options;
 import org.openqa.selenium.WebDriver.TargetLocator;
-import org.openqa.selenium.html5.Location;
-import org.openqa.selenium.html5.LocationContext;
+import org.openqa.selenium.html5.*;
 import org.openqa.selenium.interactions.HasInputDevices;
 import org.openqa.selenium.interactions.Keyboard;
 import org.openqa.selenium.interactions.Mouse;
@@ -181,14 +180,26 @@ public abstract class WebDriver extends Context {
     }
 
     public Location getLocation() {
-        checkSupport(WebDriverType.CHROME);
+        checkSupport(WebDriverType.CHROME, WebDriverType.OPERA);
 
         return ((LocationContext) seleniumWebDriver).location();
     }
 
     public void setLocation(Location location) {
-        checkSupport(WebDriverType.CHROME);
+        checkSupport(WebDriverType.CHROME, WebDriverType.OPERA);
 
         ((LocationContext) seleniumWebDriver).setLocation(location);
+    }
+    
+    public LocalStorage getLocalStorage() {
+        checkSupport(WebDriverType.CHROME, WebDriverType.OPERA);
+
+        return ((WebStorage) seleniumWebDriver).getLocalStorage();
+    }
+    
+    public SessionStorage getSessionStorage() {
+        checkSupport(WebDriverType.CHROME, WebDriverType.OPERA);
+
+        return ((WebStorage) seleniumWebDriver).getSessionStorage(); 
     }
 }
