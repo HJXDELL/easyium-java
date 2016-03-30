@@ -49,7 +49,7 @@ public class WebDriverWaitFor {
     public void textPresent(String text) {
         waitFor(new WebDriverTextPresentCondition(webDriver, text), interval, timeout);
     }
-    
+
     public void urlEquals(String url) {
         waitFor(new WebDriverURLEqualsConditioin(webDriver, url), interval, timeout);
     }

@@ -4,7 +4,7 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.ie.InternetExplorerDriverService;
 
 public class InternetExplorerDriver extends WebDriver {
-    
+
     public InternetExplorerDriver() {
         super(new org.openqa.selenium.ie.InternetExplorerDriver());
     }
@@ -16,7 +16,7 @@ public class InternetExplorerDriver extends WebDriver {
     public InternetExplorerDriver(int port) {
         super(new org.openqa.selenium.ie.InternetExplorerDriver(port));
     }
-    
+
     public InternetExplorerDriver(InternetExplorerDriverService service) {
         super(new org.openqa.selenium.ie.InternetExplorerDriver(service));
     }

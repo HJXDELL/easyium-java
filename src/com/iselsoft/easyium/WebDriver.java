@@ -167,15 +167,15 @@ public abstract class WebDriver extends Context {
     public void quit() {
         seleniumWebDriver.quit();
     }
-    
+
     @Override
     public String toString() {
-        return String.format("WebDriver <WebDriverType: %s><SessionId: %s>",getWebDriverType(), ((RemoteWebDriver) seleniumWebDriver).getSessionId());
+        return String.format("WebDriver <WebDriverType: %s><SessionId: %s>", getWebDriverType(), ((RemoteWebDriver) seleniumWebDriver).getSessionId());
     }
-    
+
     public void kill() {
         checkSupport(WebDriverType.FIREFOX);
-        
+
         ((Killable) seleniumWebDriver).kill();
     }
 
@@ -190,16 +190,18 @@ public abstract class WebDriver extends Context {
 
         ((LocationContext) seleniumWebDriver).setLocation(location);
     }
-    
+
     public LocalStorage getLocalStorage() {
         checkSupport(WebDriverType.CHROME, WebDriverType.OPERA);
 
         return ((WebStorage) seleniumWebDriver).getLocalStorage();
     }
-    
+
     public SessionStorage getSessionStorage() {
         checkSupport(WebDriverType.CHROME, WebDriverType.OPERA);
 
-        return ((WebStorage) seleniumWebDriver).getSessionStorage(); 
+        return ((WebStorage) seleniumWebDriver).getSessionStorage();
     }
+
+    // todo: android & ios apis
 }

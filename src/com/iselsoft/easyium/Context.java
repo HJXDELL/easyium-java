@@ -1,7 +1,6 @@
 package com.iselsoft.easyium;
 
-import com.iselsoft.easyium.exceptions.EasyiumException;
-import com.iselsoft.easyium.exceptions.InvalidLocatorException;
+import com.iselsoft.easyium.exceptions.*;
 import com.iselsoft.easyium.exceptions.NoSuchElementException;
 import com.iselsoft.easyium.exceptions.TimeoutException;
 import com.iselsoft.easyium.exceptions.UnsupportedOperationException;

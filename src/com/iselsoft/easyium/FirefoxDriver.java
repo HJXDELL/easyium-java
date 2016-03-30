@@ -4,7 +4,7 @@ import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxProfile;
 
-public class FirefoxDriver extends WebDriver{
+public class FirefoxDriver extends WebDriver {
 
     public FirefoxDriver() {
         super(new org.openqa.selenium.firefox.FirefoxDriver());
