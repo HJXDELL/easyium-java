@@ -1,5 +1,6 @@
 package com.iselsoft.easyium;
 
+import com.google.gson.JsonObject;
 import com.iselsoft.easyium.waiter.webdriver.WebDriverWaitFor;
 import com.iselsoft.easyium.wrappers.TargetLocator;
 import io.appium.java_client.*;
@@ -14,6 +15,8 @@ import org.openqa.selenium.interactions.Mouse;
 import org.openqa.selenium.internal.Killable;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
+import java.net.URL;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
@@ -319,5 +322,34 @@ public abstract class WebDriver extends Context {
         ((InteractsWithApps) seleniumWebDriver).closeApp();
     }
 
+    public Map<String, String> getAppStringMap() {
+        checkSupport(WebDriverType.MOBILE);
+
+        return ((HasAppStrings) seleniumWebDriver).getAppStringMap();
+    }
+
+    public Map<String, String> getAppStringMap(String language) {
+        checkSupport(WebDriverType.MOBILE);
+
+        return ((HasAppStrings) seleniumWebDriver).getAppStringMap(language);
+    }
+
+    public Map<String, String> getAppStringMap(String language, String stringFile) {
+        checkSupport(WebDriverType.MOBILE);
+
+        return ((HasAppStrings) seleniumWebDriver).getAppStringMap(language, stringFile);
+    }
+
+    public JsonObject getSettings() {
+        checkSupport(WebDriverType.MOBILE);
+
+        return ((AppiumDriver) seleniumWebDriver).getSettings();
+    }
+
+    public URL getRemoteAddress() {
+        checkSupport(WebDriverType.MOBILE);
+
+        return ((AppiumDriver) seleniumWebDriver).getRemoteAddress();
+    }
 
 }
