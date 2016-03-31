@@ -2,10 +2,7 @@ package com.iselsoft.easyium;
 
 import com.iselsoft.easyium.waiter.webdriver.WebDriverWaitFor;
 import com.iselsoft.easyium.wrappers.TargetLocator;
-import io.appium.java_client.DeviceActionShortcuts;
-import io.appium.java_client.MobileDriver;
-import io.appium.java_client.MultiTouchAction;
-import io.appium.java_client.TouchAction;
+import io.appium.java_client.*;
 import org.openqa.selenium.*;
 import org.openqa.selenium.WebDriver.Navigation;
 import org.openqa.selenium.WebDriver.Options;
@@ -107,17 +104,17 @@ public abstract class WebDriver extends Context {
         return seleniumWebDriver.getPageSource();
     }
 
-    public void close_current_window() {
+    public void closeCurrentWindow() {
         seleniumWebDriver.close();
     }
 
-    public void close_window(String nameOrHandle) {
+    public void closeWindow(String nameOrHandle) {
         if (nameOrHandle.equals(getCurrentWindowHandle())) {
-            close_current_window();
+            closeCurrentWindow();
         } else {
             String currentWindowHandle = getCurrentWindowHandle();
             switchTo().window(nameOrHandle);
-            close_current_window();
+            closeCurrentWindow();
             switchTo().window(currentWindowHandle);
         }
     }
@@ -256,4 +253,71 @@ public abstract class WebDriver extends Context {
 
         return ((DeviceActionShortcuts) seleniumWebDriver).getDeviceTime();
     }
+
+    public void swipe(int startx, int starty, int endx, int endy, int duration) {
+        checkSupport(WebDriverType.MOBILE);
+
+        ((TouchShortcuts) seleniumWebDriver).swipe(startx, starty, endx,endy, duration);
+    }
+
+    public byte[] pullFile(String remotePath) {
+        checkSupport(WebDriverType.MOBILE);
+
+        return ((InteractsWithFiles) seleniumWebDriver).pullFile(remotePath);
+    }
+
+    public byte[] pullFolder(String remotePath) {
+        checkSupport(WebDriverType.MOBILE);
+
+        return ((InteractsWithFiles) seleniumWebDriver).pullFolder(remotePath);
+    }
+
+    public void launchApp(){
+        checkSupport(WebDriverType.MOBILE);
+
+        ((InteractsWithApps) seleniumWebDriver).launchApp();
+    }
+
+    public void installApp(String appPath){
+        checkSupport(WebDriverType.MOBILE);
+
+        ((InteractsWithApps) seleniumWebDriver).installApp(appPath);
+    }
+
+
+    public boolean isAppInstalled(String bundleId){
+        checkSupport(WebDriverType.MOBILE);
+
+        return ((InteractsWithApps) seleniumWebDriver).isAppInstalled(bundleId);
+    }
+
+
+    public void resetApp(){
+        checkSupport(WebDriverType.MOBILE);
+
+        ((InteractsWithApps) seleniumWebDriver).resetApp();
+    }
+
+
+    public void runAppInBackground(int duration){
+        checkSupport(WebDriverType.MOBILE);
+
+        ((InteractsWithApps) seleniumWebDriver).runAppInBackground(duration / 1000);
+    }
+
+
+    public void removeApp(String bundleId){
+        checkSupport(WebDriverType.MOBILE);
+
+        ((InteractsWithApps) seleniumWebDriver).removeApp(bundleId);
+    }
+
+
+    public void closeApp(){
+        checkSupport(WebDriverType.MOBILE);
+
+        ((InteractsWithApps) seleniumWebDriver).closeApp();
+    }
+
+
 }
