@@ -1,14 +1,15 @@
 package com.iselsoft.easyium;
 
 import com.iselsoft.easyium.waiter.webdriver.WebDriverWaitFor;
-import org.openqa.selenium.Capabilities;
-import org.openqa.selenium.HasCapabilities;
-import org.openqa.selenium.JavascriptExecutor;
-import org.openqa.selenium.SearchContext;
+import com.iselsoft.easyium.wrappers.TargetLocator;
+import io.appium.java_client.MobileDriver;
+import io.appium.java_client.MultiTouchAction;
+import io.appium.java_client.TouchAction;
+import org.openqa.selenium.*;
 import org.openqa.selenium.WebDriver.Navigation;
 import org.openqa.selenium.WebDriver.Options;
-import org.openqa.selenium.WebDriver.TargetLocator;
 import org.openqa.selenium.html5.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.HasInputDevices;
 import org.openqa.selenium.interactions.Keyboard;
 import org.openqa.selenium.interactions.Mouse;
@@ -68,6 +69,22 @@ public abstract class WebDriver extends Context {
     public WebDriverWaitFor waitFor(long interval, long timeout) {
         return new WebDriverWaitFor(this, interval, timeout);
     }
+    
+    public Actions createActions() {
+        return new Actions(seleniumWebDriver);
+    }
+    
+    public TouchAction createTouchAction() {
+        checkSupport(WebDriverType.MOBILE);
+        
+        return new TouchAction((MobileDriver) seleniumWebDriver);
+    }
+    
+    public MultiTouchAction createMultiTouchAction() {
+        checkSupport(WebDriverType.MOBILE);
+
+        return new MultiTouchAction((MobileDriver) seleniumWebDriver);
+    }
 
     public void get(String url) {
         seleniumWebDriver.get(url);
@@ -117,7 +134,7 @@ public abstract class WebDriver extends Context {
     }
 
     public TargetLocator switchTo() {
-        return seleniumWebDriver.switchTo();
+        return new TargetLocator(this);
     }
 
     public Navigation navigate() {
@@ -203,5 +220,15 @@ public abstract class WebDriver extends Context {
         return ((WebStorage) seleniumWebDriver).getSessionStorage();
     }
 
-    // todo: android & ios apis
+    public Set<String> getContexts() {
+        checkSupport(WebDriverType.MOBILE);
+        
+        return ((ContextAware) seleniumWebDriver).getContextHandles();
+    }
+
+    public String getCurrentContext() {
+        checkSupport(WebDriverType.MOBILE);
+
+        return ((ContextAware) seleniumWebDriver).getContext();
+    }
 }

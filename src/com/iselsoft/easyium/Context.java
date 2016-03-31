@@ -77,7 +77,7 @@ public abstract class Context {
         }
     }
 
-    protected void checkSupport(WebDriverType... webDriverTypes) {
+    public void checkSupport(WebDriverType... webDriverTypes) {
         WebDriverType currentWebDriverType = getWebDriverType();
         for (WebDriverType webDriverType : webDriverTypes) {
             if (webDriverType == currentWebDriverType) {
@@ -88,7 +88,7 @@ public abstract class Context {
     }
 
     /**
-     * Only used by {@link com.iselsoft.easyium.Context#refresh}
+     * Only used by {@link Context#refresh()}
      *
      * @param locator
      * @return
@@ -144,7 +144,7 @@ public abstract class Context {
     }
 
     /**
-     * Only used by {@link com.iselsoft.easyium.Context#findElements}
+     * Only used by {@link Context#findElements}
      *
      * @param locator
      * @return
