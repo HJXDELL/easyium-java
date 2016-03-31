@@ -4,6 +4,8 @@ import com.google.gson.JsonObject;
 import com.iselsoft.easyium.waiter.webdriver.WebDriverWaitFor;
 import com.iselsoft.easyium.wrappers.TargetLocator;
 import io.appium.java_client.*;
+import io.appium.java_client.android.*;
+import io.appium.java_client.android.AndroidDriver;
 import org.openqa.selenium.*;
 import org.openqa.selenium.WebDriver.Navigation;
 import org.openqa.selenium.WebDriver.Options;
@@ -70,17 +72,17 @@ public abstract class WebDriver extends Context {
     public WebDriverWaitFor waitFor(long interval, long timeout) {
         return new WebDriverWaitFor(this, interval, timeout);
     }
-    
+
     public Actions createActions() {
         return new Actions(seleniumWebDriver);
     }
-    
+
     public TouchAction createTouchAction() {
         checkSupport(WebDriverType.MOBILE);
-        
+
         return new TouchAction((MobileDriver) seleniumWebDriver);
     }
-    
+
     public MultiTouchAction createMultiTouchAction() {
         checkSupport(WebDriverType.MOBILE);
 
@@ -223,7 +225,7 @@ public abstract class WebDriver extends Context {
 
     public Set<String> getContexts() {
         checkSupport(WebDriverType.MOBILE);
-        
+
         return ((ContextAware) seleniumWebDriver).getContextHandles();
     }
 
@@ -232,10 +234,10 @@ public abstract class WebDriver extends Context {
 
         return ((ContextAware) seleniumWebDriver).getContext();
     }
-    
+
     public void rotate(ScreenOrientation orientation) {
         checkSupport(WebDriverType.MOBILE);
-        
+
         ((Rotatable) seleniumWebDriver).rotate(orientation);
     }
 
@@ -244,10 +246,10 @@ public abstract class WebDriver extends Context {
 
         return ((Rotatable) seleniumWebDriver).getOrientation();
     }
-    
+
     public void hideKeyboard() {
         checkSupport(WebDriverType.MOBILE);
-        
+
         ((DeviceActionShortcuts) seleniumWebDriver).hideKeyboard();
     }
 
@@ -260,7 +262,7 @@ public abstract class WebDriver extends Context {
     public void swipe(int startx, int starty, int endx, int endy, int duration) {
         checkSupport(WebDriverType.MOBILE);
 
-        ((TouchShortcuts) seleniumWebDriver).swipe(startx, starty, endx,endy, duration);
+        ((TouchShortcuts) seleniumWebDriver).swipe(startx, starty, endx, endy, duration);
     }
 
     public byte[] pullFile(String remotePath) {
@@ -275,48 +277,48 @@ public abstract class WebDriver extends Context {
         return ((InteractsWithFiles) seleniumWebDriver).pullFolder(remotePath);
     }
 
-    public void launchApp(){
+    public void launchApp() {
         checkSupport(WebDriverType.MOBILE);
 
         ((InteractsWithApps) seleniumWebDriver).launchApp();
     }
 
-    public void installApp(String appPath){
+    public void installApp(String appPath) {
         checkSupport(WebDriverType.MOBILE);
 
         ((InteractsWithApps) seleniumWebDriver).installApp(appPath);
     }
 
 
-    public boolean isAppInstalled(String bundleId){
+    public boolean isAppInstalled(String bundleId) {
         checkSupport(WebDriverType.MOBILE);
 
         return ((InteractsWithApps) seleniumWebDriver).isAppInstalled(bundleId);
     }
 
 
-    public void resetApp(){
+    public void resetApp() {
         checkSupport(WebDriverType.MOBILE);
 
         ((InteractsWithApps) seleniumWebDriver).resetApp();
     }
 
 
-    public void runAppInBackground(int duration){
+    public void runAppInBackground(int duration) {
         checkSupport(WebDriverType.MOBILE);
 
         ((InteractsWithApps) seleniumWebDriver).runAppInBackground(duration / 1000);
     }
 
 
-    public void removeApp(String bundleId){
+    public void removeApp(String bundleId) {
         checkSupport(WebDriverType.MOBILE);
 
         ((InteractsWithApps) seleniumWebDriver).removeApp(bundleId);
     }
 
 
-    public void closeApp(){
+    public void closeApp() {
         checkSupport(WebDriverType.MOBILE);
 
         ((InteractsWithApps) seleniumWebDriver).closeApp();
@@ -352,4 +354,117 @@ public abstract class WebDriver extends Context {
         return ((AppiumDriver) seleniumWebDriver).getRemoteAddress();
     }
 
+    public void pressKeyCode(int key) {
+        checkSupport(WebDriverType.ANDROID);
+
+        ((AndroidDeviceActionShortcuts) seleniumWebDriver).pressKeyCode(key);
+    }
+
+    public void pressKeyCode(int key, Integer metastate) {
+        checkSupport(WebDriverType.ANDROID);
+
+        ((AndroidDeviceActionShortcuts) seleniumWebDriver).pressKeyCode(key, metastate);
+    }
+
+    public void longPressKeyCode(int key) {
+        checkSupport(WebDriverType.ANDROID);
+
+        ((AndroidDeviceActionShortcuts) seleniumWebDriver).longPressKeyCode(key);
+    }
+
+    public void longPressKeyCode(int key, Integer metastate) {
+        checkSupport(WebDriverType.ANDROID);
+
+        ((AndroidDeviceActionShortcuts) seleniumWebDriver).longPressKeyCode(key, metastate);
+    }
+
+    public NetworkConnectionSetting getNetworkConnection() {
+        checkSupport(WebDriverType.ANDROID);
+
+        return ((HasNetworkConnection) seleniumWebDriver).getNetworkConnection();
+    }
+
+    public void setNetworkConnection(NetworkConnectionSetting connection) {
+        checkSupport(WebDriverType.ANDROID);
+
+        ((HasNetworkConnection) seleniumWebDriver).setNetworkConnection(connection);
+    }
+
+    public void pushFile(String remotePath, byte[] base64Data) {
+        checkSupport(WebDriverType.ANDROID);
+
+        ((PushesFiles) seleniumWebDriver).pushFile(remotePath, base64Data);
+    }
+
+    public void startActivity(String appPackage, String appActivity, String appWaitPackage, String appWaitActivity,
+                              boolean stopApp) throws IllegalArgumentException {
+        checkSupport(WebDriverType.ANDROID);
+
+        ((StartsActivity) seleniumWebDriver).startActivity(appPackage, appActivity, appWaitPackage, appWaitActivity, stopApp);
+    }
+
+    public void startActivity(String appPackage, String appActivity, String appWaitPackage, String appWaitActivity)
+            throws IllegalArgumentException {
+        checkSupport(WebDriverType.ANDROID);
+
+        ((StartsActivity) seleniumWebDriver).startActivity(appPackage, appActivity, appWaitPackage, appWaitActivity);
+    }
+
+    public void startActivity(String appPackage, String appActivity) throws IllegalArgumentException {
+        checkSupport(WebDriverType.ANDROID);
+
+        ((StartsActivity) seleniumWebDriver).startActivity(appPackage, appActivity);
+    }
+
+    public void endTestCoverage(String intent, String path) {
+        checkSupport(WebDriverType.ANDROID);
+
+        ((AndroidDriver) seleniumWebDriver).endTestCoverage(intent, path);
+    }
+
+    public String getCurrentActivity() {
+        checkSupport(WebDriverType.ANDROID);
+
+        return ((AndroidDriver) seleniumWebDriver).currentActivity();
+    }
+
+    public void openNotifications() {
+        checkSupport(WebDriverType.ANDROID);
+
+        ((AndroidDriver) seleniumWebDriver).openNotifications();
+    }
+
+    public void lock() {
+        checkSupport(WebDriverType.ANDROID);
+
+        ((AndroidDriver) seleniumWebDriver).lockDevice();
+    }
+
+    public void unlock() {
+        checkSupport(WebDriverType.ANDROID);
+
+        ((AndroidDriver) seleniumWebDriver).unlockDevice();
+    }
+
+    public boolean isLocked() {
+        checkSupport(WebDriverType.ANDROID);
+
+        return ((AndroidDriver) seleniumWebDriver).isLocked();
+    }
+
+    public void toggleLocationServices() {
+        checkSupport(WebDriverType.ANDROID);
+
+        ((AndroidDriver) seleniumWebDriver).toggleLocationServices();
+    }
+
+    public void ignoreUnimportantViews(Boolean compress) {
+        checkSupport(WebDriverType.ANDROID);
+
+        ((AndroidDriver) seleniumWebDriver).ignoreUnimportantViews(compress);
+    }
+
+    // todo: IOSDriver
+
 }
+
