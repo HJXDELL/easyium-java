@@ -2,6 +2,7 @@ package com.iselsoft.easyium;
 
 import com.iselsoft.easyium.waiter.webdriver.WebDriverWaitFor;
 import com.iselsoft.easyium.wrappers.TargetLocator;
+import io.appium.java_client.DeviceActionShortcuts;
 import io.appium.java_client.MobileDriver;
 import io.appium.java_client.MultiTouchAction;
 import io.appium.java_client.TouchAction;
@@ -197,13 +198,13 @@ public abstract class WebDriver extends Context {
     }
 
     public Location getLocation() {
-        checkSupport(WebDriverType.CHROME, WebDriverType.OPERA);
+        checkSupport(WebDriverType.CHROME, WebDriverType.OPERA, WebDriverType.ANDROID, WebDriverType.IOS);
 
         return ((LocationContext) seleniumWebDriver).location();
     }
 
     public void setLocation(Location location) {
-        checkSupport(WebDriverType.CHROME, WebDriverType.OPERA);
+        checkSupport(WebDriverType.CHROME, WebDriverType.OPERA, WebDriverType.ANDROID, WebDriverType.IOS);
 
         ((LocationContext) seleniumWebDriver).setLocation(location);
     }
@@ -242,5 +243,17 @@ public abstract class WebDriver extends Context {
         checkSupport(WebDriverType.MOBILE);
 
         return ((Rotatable) seleniumWebDriver).getOrientation();
+    }
+    
+    public void hideKeyboard() {
+        checkSupport(WebDriverType.MOBILE);
+        
+        ((DeviceActionShortcuts) seleniumWebDriver).hideKeyboard();
+    }
+
+    public String getDeviceTime() {
+        checkSupport(WebDriverType.MOBILE);
+
+        return ((DeviceActionShortcuts) seleniumWebDriver).getDeviceTime();
     }
 }
