@@ -8,7 +8,7 @@ public enum WebDriverType {
 
     public final static WebDriverType[] MOBILE = new WebDriverType[]{ANDROID, IOS};
 
-    private String name;
+    private final String name;
 
     private WebDriverType(String name) {
         this.name = name;
