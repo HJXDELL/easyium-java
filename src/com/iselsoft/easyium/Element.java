@@ -62,6 +62,19 @@ public abstract class Element extends Context {
         return new ElementWaitFor(this, interval, timeout);
     }
 
+    public void blur() {
+        try {
+            try {
+                getWebDriver().executeScript("arguments[0].blur()", this);
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().visible();
+                getWebDriver().executeScript("arguments[0].blur()", this);
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+
     public void click() {
         try {
             try {
@@ -69,6 +82,32 @@ public abstract class Element extends Context {
             } catch (NoSuchElementException | StaleElementReferenceException | ElementNotVisibleException e) {
                 waitFor().visible();
                 seleniumElement().click();
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+
+    public void doubleClick() {
+        try {
+            try {
+                getWebDriver().createActions().doubleClick(seleniumElement()).perform();
+            } catch (NoSuchElementException | StaleElementReferenceException | ElementNotVisibleException e) {
+                waitFor().visible();
+                getWebDriver().createActions().doubleClick(seleniumElement()).perform();
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+
+    public void contextClick() {
+        try {
+            try {
+                getWebDriver().createActions().contextClick(seleniumElement()).perform();
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().visible();
+                getWebDriver().createActions().contextClick(seleniumElement()).perform();
             }
         } catch (WebDriverException e) {
             throw new EasyiumException(e.getMessage(), this);
@@ -100,7 +139,7 @@ public abstract class Element extends Context {
             throw new EasyiumException(e.getMessage(), this);
         }
     }
-    
+
     public void clear() {
         try {
             try {
@@ -113,7 +152,7 @@ public abstract class Element extends Context {
             throw new EasyiumException(e.getMessage(), this);
         }
     }
-    
+
     public String getTagName() {
         try {
             try {
@@ -139,27 +178,14 @@ public abstract class Element extends Context {
             throw new EasyiumException(e.getMessage(), this);
         }
     }
-    
-    public boolean isSelected() {
+
+    public String getValue() {
         try {
             try {
-                return seleniumElement().isSelected();
+                return seleniumElement().getAttribute("value");
             } catch (NoSuchElementException | StaleElementReferenceException e) {
-                waitFor().visible();
-                return seleniumElement().isSelected();
-            }
-        } catch (WebDriverException e) {
-            throw new EasyiumException(e.getMessage(), this);
-        }
-    }
-    
-    public boolean isEnabled() {
-        try {
-            try {
-                return seleniumElement().isEnabled();
-            } catch (NoSuchElementException | StaleElementReferenceException e) {
-                waitFor().visible();
-                return seleniumElement().isEnabled();
+                waitFor().exists();
+                return seleniumElement().getAttribute("value");
             }
         } catch (WebDriverException e) {
             throw new EasyiumException(e.getMessage(), this);
@@ -178,6 +204,164 @@ public abstract class Element extends Context {
             throw new EasyiumException(e.getMessage(), this);
         }
     }
+
+    public String getTextNodeContent(int textNodeIndex) {
+        String content;
+
+        try {
+            try {
+                content = (String) getWebDriver().executeScript(String.format("return arguments[0].childNodes[%s].nodeValue", textNodeIndex), this);
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().exists();
+                content = (String) getWebDriver().executeScript(String.format("return arguments[0].childNodes[%s].nodeValue", textNodeIndex), this);
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+
+        if (content == null) {
+            throw new EasyiumException("Cannot get text content of a non-text node in element:", this);
+        }
+        return content;
+    }
+
+    public void setSelectionRange(int startIndex, int endIndex) {
+        String script = "function getTextNodesIn(node) {\n" +
+                "                var textNodes = [];\n" +
+                "                if (node.nodeType == 3) {\n" +
+                "                    textNodes.push(node);\n" +
+                "                } else {\n" +
+                "                    var children = node.childNodes;\n" +
+                "                    for (var i = 0, len = children.length; i < len; ++i) {\n" +
+                "                        textNodes.push.apply(textNodes, getTextNodesIn(children[i]));\n" +
+                "                    }\n" +
+                "                }\n" +
+                "                return textNodes;\n" +
+                "            }\n" +
+                "\n" +
+                "            function setSelectionRange(el, start, end) {\n" +
+                "                if (el.tagName == 'INPUT' || el.tagName == 'TEXTAREA'){\n" +
+                "                    if(el.createTextRange){\n" +
+                "                        var Range=el.createTextRange();\n" +
+                "                        Range.collapse();\n" +
+                "                        Range.moveEnd('character',end);\n" +
+                "                        Range.moveStart('character',start);\n" +
+                "                        Range.select();\n" +
+                "                    }else if(el.setSelectionRange){\n" +
+                "                        el.focus();\n" +
+                "                        el.setSelectionRange(start,end);\n" +
+                "                    }\n" +
+                "                } else {\n" +
+                "            if (document.createRange && window.getSelection) {\n" +
+                "                        var range = document.createRange();\n" +
+                "                        range.selectNodeContents(el);\n" +
+                "                        var textNodes = getTextNodesIn(el);\n" +
+                "                        var foundStart = false;\n" +
+                "                        var charCount = 0, endCharCount;\n" +
+                "\n" +
+                "                        for (var i = 0, textNode; textNode = textNodes[i++]; ) {\n" +
+                "                            endCharCount = charCount + textNode.length;\n" +
+                "                            if (!foundStart && start >= charCount\n" +
+                "                                    && (start < endCharCount ||\n" +
+                "                                    (start == endCharCount && i < textNodes.length))) {\n" +
+                "                                range.setStart(textNode, start - charCount);\n" +
+                "                                foundStart = true;\n" +
+                "                            }\n" +
+                "                            if (foundStart && end <= endCharCount) {\n" +
+                "                                range.setEnd(textNode, end - charCount);\n" +
+                "                                break;\n" +
+                "                            }\n" +
+                "                            charCount = endCharCount;\n" +
+                "                        }\n" +
+                "\n" +
+                "                        var sel = window.getSelection();\n" +
+                "                        sel.removeAllRanges();\n" +
+                "                        sel.addRange(range);\n" +
+                "                    } else if (document.selection && document.body.createTextRange) {\n" +
+                "                        var textRange = document.body.createTextRange();\n" +
+                "                        textRange.moveToElementText(el);\n" +
+                "                        textRange.collapse(true);\n" +
+                "                        textRange.moveEnd('character', end);\n" +
+                "                        textRange.moveStart('character', start);\n" +
+                "                        textRange.select();\n" +
+                "                    }\n" +
+                "                }\n" +
+                "            }\n" +
+                "\n" +
+                "            setSelectionRange(arguments[0], %s, %s);";
+
+        try {
+            try {
+                getWebDriver().executeScript(String.format(script, startIndex, endIndex), this);
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().visible();
+                getWebDriver().executeScript(String.format(script, startIndex, endIndex), this);
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+
+    public String getInnerHTML() {
+        try {
+            try {
+                return (String) getWebDriver().executeScript("return arguments[0].innerHTML", this);
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().exists();
+                return (String) getWebDriver().executeScript("return arguments[0].innerHTML", this);
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+    
+    public void mouseOver() {
+        checkSupport(WebDriverType.BROWSER);
+        
+        String script = "var mouseoverEventObj = null;\n" +
+                "            if (typeof window.Event == \"function\") {\n" +
+                "                mouseoverEventObj = new MouseEvent('mouseover', {'bubbles': true, 'cancelable': true});\n" +
+                "            } else {\n" +
+                "                mouseoverEventObj = document.createEvent(\"MouseEvents\");\n" +
+                "                mouseoverEventObj.initMouseEvent(\"mouseover\", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);\n" +
+                "            }\n" +
+                "            arguments[0].dispatchEvent(mouseoverEventObj);";
+
+        try {
+            try {
+                getWebDriver().executeScript(script, this);
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().exists();
+                getWebDriver().executeScript(script, this);
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+
+    public void mouseOut() {
+        checkSupport(WebDriverType.BROWSER);
+
+        String script = "var mouseoutEventObj = null;\n" +
+                "            if (typeof window.Event == \"function\") {\n" +
+                "                mouseoutEventObj = new MouseEvent('mouseout', {'bubbles': true, 'cancelable': true});\n" +
+                "            } else {\n" +
+                "                mouseoutEventObj = document.createEvent(\"MouseEvents\");\n" +
+                "                mouseoutEventObj.initMouseEvent(\"mouseout\", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);\n" +
+                "            }\n" +
+                "            arguments[0].dispatchEvent(mouseoutEventObj);";
+
+        try {
+            try {
+                getWebDriver().executeScript(script, this);
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().exists();
+                getWebDriver().executeScript(script, this);
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
     
     public Point getLocation() {
         try {
@@ -191,7 +375,7 @@ public abstract class Element extends Context {
             throw new EasyiumException(e.getMessage(), this);
         }
     }
-    
+
     public Dimension getSize() {
         try {
             try {
@@ -204,7 +388,7 @@ public abstract class Element extends Context {
             throw new EasyiumException(e.getMessage(), this);
         }
     }
-    
+
     public Rectangle getRect() {
         try {
             try {
@@ -217,7 +401,7 @@ public abstract class Element extends Context {
             throw new EasyiumException(e.getMessage(), this);
         }
     }
-    
+
     public String getCssValue(String propertyName) {
         try {
             try {
@@ -230,10 +414,10 @@ public abstract class Element extends Context {
             throw new EasyiumException(e.getMessage(), this);
         }
     }
-    
+
     public Coordinates getCoordinates() {
         checkSupport(WebDriverType.MOBILE);
-        
+
         try {
             try {
                 return ((Locatable) seleniumElement()).getCoordinates();
@@ -245,7 +429,33 @@ public abstract class Element extends Context {
             throw new EasyiumException(e.getMessage(), this);
         }
     }
-    
+
+    public boolean isSelected() {
+        try {
+            try {
+                return seleniumElement().isSelected();
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().visible();
+                return seleniumElement().isSelected();
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+
+    public boolean isEnabled() {
+        try {
+            try {
+                return seleniumElement().isEnabled();
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().visible();
+                return seleniumElement().isEnabled();
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+
     public void tap() {
         checkSupport(WebDriverType.MOBILE);
 
@@ -260,10 +470,10 @@ public abstract class Element extends Context {
             throw new EasyiumException(e.getMessage(), this);
         }
     }
-    
+
     public void longPress() {
         checkSupport(WebDriverType.MOBILE);
-        
+
         try {
             try {
                 getWebDriver().createTouchAction().longPress(seleniumElement()).perform();
@@ -290,7 +500,7 @@ public abstract class Element extends Context {
             throw new EasyiumException(e.getMessage(), this);
         }
     }
-    
+
     public void scroll(SwipeElementDirection direction, int duration) {
         checkSupport(WebDriverType.MOBILE);
 
@@ -305,7 +515,7 @@ public abstract class Element extends Context {
             throw new EasyiumException(e.getMessage(), this);
         }
     }
-    
+
     public void pinch() {
         checkSupport(WebDriverType.MOBILE);
 
@@ -335,7 +545,7 @@ public abstract class Element extends Context {
             throw new EasyiumException(e.getMessage(), this);
         }
     }
-    
+
     public void setValue(String value) {
         checkSupport(WebDriverType.IOS);
 
