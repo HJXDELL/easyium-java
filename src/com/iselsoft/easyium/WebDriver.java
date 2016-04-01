@@ -5,6 +5,8 @@ import com.iselsoft.easyium.waiter.webdriver.WebDriverWaitFor;
 import io.appium.java_client.*;
 import io.appium.java_client.android.*;
 import io.appium.java_client.android.AndroidDriver;
+import io.appium.java_client.ios.*;
+import io.appium.java_client.ios.IOSDriver;
 import org.openqa.selenium.*;
 import org.openqa.selenium.WebDriver.Navigation;
 import org.openqa.selenium.WebDriver.Options;
@@ -353,10 +355,10 @@ public abstract class WebDriver extends Context {
     }
 
 
-    public void runAppInBackground(int duration) {
+    public void runAppInBackground(int milliseconds) {
         checkSupport(WebDriverType.MOBILE);
 
-        ((InteractsWithApps) seleniumWebDriver).runAppInBackground(duration / 1000);
+        ((InteractsWithApps) seleniumWebDriver).runAppInBackground(milliseconds / 1000);
     }
 
 
@@ -495,6 +497,22 @@ public abstract class WebDriver extends Context {
         ((AndroidDriver) seleniumWebDriver).unlockDevice();
     }
 
+    public void lock(int milliseconds) {
+        checkSupport(WebDriverType.MOBILE);
+
+        if (getWebDriverType() == WebDriverType.ANDROID) {
+            lock();
+            try {
+                Thread.sleep(milliseconds);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            unlock();
+        } else {
+            ((IOSDriver) seleniumWebDriver).lockDevice(milliseconds / 1000);
+        }
+    }
+
     public boolean isLocked() {
         checkSupport(WebDriverType.ANDROID);
 
@@ -511,6 +529,24 @@ public abstract class WebDriver extends Context {
         checkSupport(WebDriverType.ANDROID);
 
         ((AndroidDriver) seleniumWebDriver).ignoreUnimportantViews(compress);
+    }
+
+    public void hideKeyboard(String keyName) {
+        checkSupport(WebDriverType.IOS);
+
+        ((IOSDeviceActionShortcuts) seleniumWebDriver).hideKeyboard(keyName);
+    }
+
+    public void hideKeyboard(String strategy, String keyName) {
+        checkSupport(WebDriverType.IOS);
+
+        ((IOSDeviceActionShortcuts) seleniumWebDriver).hideKeyboard(strategy, keyName);
+    }
+
+    public void shake() {
+        checkSupport(WebDriverType.IOS);
+
+        ((IOSDeviceActionShortcuts) seleniumWebDriver).shake();
     }
 }
 
