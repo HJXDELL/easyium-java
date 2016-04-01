@@ -1,8 +1,9 @@
 package com.iselsoft.easyium;
 
+import com.iselsoft.easyium.exceptions.EasyiumException;
+import com.iselsoft.easyium.exceptions.NoSuchElementException;
 import com.iselsoft.easyium.waiter.element.ElementWaitFor;
-import org.openqa.selenium.SearchContext;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 
 public abstract class Element extends Context {
     protected WebElement seleniumElement;
@@ -55,19 +56,203 @@ public abstract class Element extends Context {
         return new ElementWaitFor(this, interval, timeout);
     }
 
+    public void click() {
+        try {
+            try {
+                seleniumElement().click();
+            } catch (NoSuchElementException | StaleElementReferenceException | ElementNotVisibleException e) {
+                waitFor().visible();
+                seleniumElement().click();
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+
+    public void submit() {
+        try {
+            try {
+                seleniumElement().submit();
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().visible();
+                seleniumElement().submit();
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+
+    public void sendKeys(CharSequence... keysToSend) {
+        try {
+            try {
+                seleniumElement().sendKeys(keysToSend);
+            } catch (NoSuchElementException | StaleElementReferenceException | ElementNotVisibleException e) {
+                waitFor().visible();
+                seleniumElement().sendKeys(keysToSend);
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+    
+    public void clear() {
+        try {
+            try {
+                seleniumElement().clear();
+            } catch (NoSuchElementException | StaleElementReferenceException | ElementNotVisibleException e) {
+                waitFor().visible();
+                seleniumElement().clear();
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+    
+    public String getTagName() {
+        try {
+            try {
+                return seleniumElement().getTagName();
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().exists();
+                return seleniumElement().getTagName();
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+
     public String getAttribute(String name) {
-        return null;
+        try {
+            try {
+                return seleniumElement().getAttribute(name);
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().exists();
+                return seleniumElement().getAttribute(name);
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+    
+    public boolean isSelected() {
+        try {
+            try {
+                return seleniumElement().isSelected();
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().visible();
+                return seleniumElement().isSelected();
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+    
+    public boolean isEnabled() {
+        try {
+            try {
+                return seleniumElement().isEnabled();
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().visible();
+                return seleniumElement().isEnabled();
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
     }
 
     public String getText() {
-        return null;
+        try {
+            try {
+                return seleniumElement().getText();
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().exists();
+                return seleniumElement().getText();
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
     }
-
-    public boolean exists() {
-        return true;
+    
+    public Point getLocation() {
+        try {
+            try {
+                return seleniumElement().getLocation();
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().exists();
+                return seleniumElement().getLocation();
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+    
+    public Dimension getSize() {
+        try {
+            try {
+                return seleniumElement().getSize();
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().exists();
+                return seleniumElement().getSize();
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+    
+    public Rectangle getRect() {
+        try {
+            try {
+                return seleniumElement().getRect();
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().exists();
+                return seleniumElement().getRect();
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+    
+    public String getCssValue(String propertyName) {
+        try {
+            try {
+                return seleniumElement().getCssValue(propertyName);
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().exists();
+                return seleniumElement().getCssValue(propertyName);
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
     }
 
     public boolean isDisplayed() {
-        return true;
+        try {
+            try {
+                return seleniumElement().isDisplayed();
+            } catch (StaleElementReferenceException e) {
+                refresh();
+                return seleniumElement().isDisplayed();
+            }
+        } catch (NoSuchElementException e) {
+            return false;
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+
+    public boolean exists() {
+        try {
+            try {
+                seleniumElement().isDisplayed();
+                return true;
+            } catch (StaleElementReferenceException e) {
+                refresh();
+                return true;
+            }
+        } catch (NoSuchElementException e) {
+            return false;
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
     }
 }
