@@ -2,7 +2,6 @@ package com.iselsoft.easyium;
 
 import com.google.gson.JsonObject;
 import com.iselsoft.easyium.waiter.webdriver.WebDriverWaitFor;
-import com.iselsoft.easyium.wrappers.TargetLocator;
 import io.appium.java_client.*;
 import io.appium.java_client.android.*;
 import io.appium.java_client.android.AndroidDriver;
@@ -137,7 +136,57 @@ public abstract class WebDriver extends Context {
     }
 
     public TargetLocator switchTo() {
-        return new TargetLocator(this);
+        return new TargetLocator(seleniumWebDriver.switchTo());
+    }
+
+    public class TargetLocator {
+        protected final org.openqa.selenium.WebDriver.TargetLocator targetLocator;
+
+        protected TargetLocator(org.openqa.selenium.WebDriver.TargetLocator targetLocator) {
+            this.targetLocator = targetLocator;
+        }
+
+        public WebDriver frame(int index) {
+            targetLocator.frame(index);
+            return WebDriver.this;
+        }
+
+        public WebDriver frame(String nameOrId) {
+            targetLocator.frame(nameOrId);
+            return WebDriver.this;
+        }
+
+        public WebDriver frame(Element frameElement) {
+            frameElement.waitFor().exists();
+            targetLocator.frame(frameElement.seleniumElement());
+            return WebDriver.this;
+        }
+
+        public WebDriver parentFrame() {
+            targetLocator.parentFrame();
+            return WebDriver.this;
+        }
+
+        public WebDriver window(String nameOrHandle) {
+            targetLocator.window(nameOrHandle);
+            return WebDriver.this;
+        }
+
+        public WebDriver defaultContent() {
+            targetLocator.defaultContent();
+            return WebDriver.this;
+        }
+
+        public Alert alert() {
+            return targetLocator.alert();
+        }
+
+        public WebDriver context(String name) {
+            WebDriver.this.checkSupport(WebDriverType.MOBILE);
+
+            ((ContextAware) seleniumWebDriver).context(name);
+            return WebDriver.this;
+        }
     }
 
     public Navigation navigate() {
@@ -200,13 +249,13 @@ public abstract class WebDriver extends Context {
     }
 
     public Location getLocation() {
-        checkSupport(WebDriverType.CHROME, WebDriverType.OPERA, WebDriverType.ANDROID, WebDriverType.IOS);
+        checkSupport(WebDriverType.MOBILE, WebDriverType.CHROME, WebDriverType.OPERA);
 
         return ((LocationContext) seleniumWebDriver).location();
     }
 
     public void setLocation(Location location) {
-        checkSupport(WebDriverType.CHROME, WebDriverType.OPERA, WebDriverType.ANDROID, WebDriverType.IOS);
+        checkSupport(WebDriverType.MOBILE, WebDriverType.CHROME, WebDriverType.OPERA);
 
         ((LocationContext) seleniumWebDriver).setLocation(location);
     }
@@ -463,8 +512,5 @@ public abstract class WebDriver extends Context {
 
         ((AndroidDriver) seleniumWebDriver).ignoreUnimportantViews(compress);
     }
-
-    // todo: IOSDriver
-
 }
 
