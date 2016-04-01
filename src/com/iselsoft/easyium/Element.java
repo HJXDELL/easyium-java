@@ -3,7 +3,13 @@ package com.iselsoft.easyium;
 import com.iselsoft.easyium.exceptions.EasyiumException;
 import com.iselsoft.easyium.exceptions.NoSuchElementException;
 import com.iselsoft.easyium.waiter.element.ElementWaitFor;
+import io.appium.java_client.SwipeElementDirection;
+import io.appium.java_client.TouchableElement;
+import io.appium.java_client.android.AndroidElement;
+import io.appium.java_client.ios.IOSElement;
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.internal.Coordinates;
+import org.openqa.selenium.internal.Locatable;
 
 public abstract class Element extends Context {
     protected WebElement seleniumElement;
@@ -219,6 +225,141 @@ public abstract class Element extends Context {
             } catch (NoSuchElementException | StaleElementReferenceException e) {
                 waitFor().exists();
                 return seleniumElement().getCssValue(propertyName);
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+    
+    public Coordinates getCoordinates() {
+        checkSupport(WebDriverType.MOBILE);
+        
+        try {
+            try {
+                return ((Locatable) seleniumElement()).getCoordinates();
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().exists();
+                return ((Locatable) seleniumElement()).getCoordinates();
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+    
+    public void tap() {
+        checkSupport(WebDriverType.MOBILE);
+
+        try {
+            try {
+                getWebDriver().createTouchAction().tap(seleniumElement()).perform();
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().visible();
+                getWebDriver().createTouchAction().tap(seleniumElement()).perform();
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+    
+    public void longPress() {
+        checkSupport(WebDriverType.MOBILE);
+        
+        try {
+            try {
+                getWebDriver().createTouchAction().longPress(seleniumElement()).perform();
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().visible();
+                getWebDriver().createTouchAction().longPress(seleniumElement()).perform();
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+
+    public void longPress(int duration) {
+        checkSupport(WebDriverType.MOBILE);
+
+        try {
+            try {
+                getWebDriver().createTouchAction().longPress(seleniumElement(), duration).perform();
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().visible();
+                getWebDriver().createTouchAction().longPress(seleniumElement(), duration).perform();
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+    
+    public void scroll(SwipeElementDirection direction, int duration) {
+        checkSupport(WebDriverType.MOBILE);
+
+        try {
+            try {
+                ((TouchableElement) seleniumElement()).swipe(direction, duration);
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().visible();
+                ((TouchableElement) seleniumElement()).swipe(direction, duration);
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+    
+    public void pinch() {
+        checkSupport(WebDriverType.MOBILE);
+
+        try {
+            try {
+                ((TouchableElement) seleniumElement()).pinch();
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().visible();
+                ((TouchableElement) seleniumElement()).pinch();
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+
+    public void zoom() {
+        checkSupport(WebDriverType.MOBILE);
+
+        try {
+            try {
+                ((TouchableElement) seleniumElement()).zoom();
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().visible();
+                ((TouchableElement) seleniumElement()).zoom();
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+    
+    public void setValue(String value) {
+        checkSupport(WebDriverType.IOS);
+
+        try {
+            try {
+                ((IOSElement) seleniumElement()).setValue(value);
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().exists();
+                ((IOSElement) seleniumElement()).setValue(value);
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+
+    public void replaceValue(String value) {
+        checkSupport(WebDriverType.ANDROID);
+
+        try {
+            try {
+                ((AndroidElement) seleniumElement()).replaceValue(value);
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().exists();
+                ((AndroidElement) seleniumElement()).replaceValue(value);
             }
         } catch (WebDriverException e) {
             throw new EasyiumException(e.getMessage(), this);
