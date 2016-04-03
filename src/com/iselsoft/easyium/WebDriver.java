@@ -248,9 +248,13 @@ public abstract class WebDriver extends Context {
     public void scroll(ScrollDirection direction) {
         checkSupport(WebDriverType.MOBILE);
 
-        HashMap<String, String> scrollParam = new HashMap<>();
-        scrollParam.put("direction", direction.getValue());
-        executeScript("mobile: scroll", scrollParam);
+        HashMap<String, String> scrollParams = new HashMap<>();
+        scrollParams.put("direction", direction.getValue());
+        executeScript("mobile: scroll", scrollParams);
+    }
+
+    public void scrollTo(Element element) {
+        element.scrollIntoView();
     }
 
     public void kill() {

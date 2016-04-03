@@ -578,16 +578,57 @@ public abstract class Element extends Context {
 
         try {
             try {
-                HashMap<String, String> scrollParam = new HashMap<>();
-                scrollParam.put("direction", direction.getValue());
-                scrollParam.put("element", ((HasIdentity) seleniumElement()).getId());
-                getWebDriver().executeScript("mobile: scroll", scrollParam);
+                HashMap<String, String> scrollParams = new HashMap<>();
+                scrollParams.put("direction", direction.getValue());
+                scrollParams.put("element", ((HasIdentity) seleniumElement()).getId());
+                getWebDriver().executeScript("mobile: scroll", scrollParams);
             } catch (NoSuchElementException | StaleElementReferenceException e) {
                 waitFor().visible();
-                HashMap<String, String> scrollParam = new HashMap<>();
-                scrollParam.put("direction", direction.getValue());
-                scrollParam.put("element", ((HasIdentity) seleniumElement()).getId());
-                getWebDriver().executeScript("mobile: scroll", scrollParam);
+                HashMap<String, String> scrollParams = new HashMap<>();
+                scrollParams.put("direction", direction.getValue());
+                scrollParams.put("element", ((HasIdentity) seleniumElement()).getId());
+                getWebDriver().executeScript("mobile: scroll", scrollParams);
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+
+    public void scrollTo(Element targetElement) {
+        checkSupport(WebDriverType.MOBILE);
+
+        try {
+            try {
+                getWebDriver().createTouchAction().press(seleniumElement()).moveTo(targetElement.seleniumElement()).release().perform();
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().exists();
+                targetElement.waitFor().exists();
+                getWebDriver().createTouchAction().press(seleniumElement()).moveTo(targetElement.seleniumElement()).release().perform();
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+
+    public void scrollIntoView() {
+        try {
+            try {
+                if (WebDriverType.MOBILE.contains(getWebDriverType())) {
+                    HashMap<String, String> scrollParams = new HashMap<>();
+                    scrollParams.put("element", ((HasIdentity) seleniumElement()).getId());
+                    getWebDriver().executeScript("mobile: scrollTo", scrollParams);
+                } else {
+                    getWebDriver().executeScript("arguments[0].scrollIntoView();", this);
+                }
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().exists();
+                if (WebDriverType.MOBILE.contains(getWebDriverType())) {
+                    HashMap<String, String> scrollParams = new HashMap<>();
+                    scrollParams.put("element", ((HasIdentity) seleniumElement()).getId());
+                    getWebDriver().executeScript("mobile: scrollTo", scrollParams);
+                } else {
+                    getWebDriver().executeScript("arguments[0].scrollIntoView();", this);
+                }
             }
         } catch (WebDriverException e) {
             throw new EasyiumException(e.getMessage(), this);
