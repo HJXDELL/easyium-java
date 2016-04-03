@@ -10,7 +10,7 @@ public enum WebDriverType {
 
     private final String name;
 
-    private WebDriverType(String name) {
+    WebDriverType(String name) {
         this.name = name;
     }
 

@@ -19,6 +19,7 @@ import org.openqa.selenium.internal.Killable;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.URL;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.TimeUnit;
@@ -242,6 +243,14 @@ public abstract class WebDriver extends Context {
     @Override
     public String toString() {
         return String.format("WebDriver <WebDriverType: %s><SessionId: %s>", getWebDriverType(), ((RemoteWebDriver) seleniumWebDriver()).getSessionId());
+    }
+
+    public void scroll(ScrollDirection direction) {
+        checkSupport(WebDriverType.MOBILE);
+
+        HashMap<String, String> scrollParam = new HashMap<>();
+        scrollParam.put("direction", direction.getValue());
+        executeScript("mobile: scroll", scrollParam);
     }
 
     public void kill() {

@@ -9,7 +9,10 @@ import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.ios.IOSElement;
 import org.openqa.selenium.*;
 import org.openqa.selenium.interactions.internal.Coordinates;
+import org.openqa.selenium.internal.HasIdentity;
 import org.openqa.selenium.internal.Locatable;
+
+import java.util.HashMap;
 
 public abstract class Element extends Context {
     protected WebElement seleniumElement;
@@ -416,8 +419,6 @@ public abstract class Element extends Context {
     }
 
     public Coordinates getCoordinates() {
-        checkSupport(WebDriverType.MOBILE);
-
         try {
             try {
                 return ((Locatable) seleniumElement()).getCoordinates();
@@ -501,15 +502,21 @@ public abstract class Element extends Context {
         }
     }
 
-    public void scroll(SwipeElementDirection direction, int duration) {
+    public void scroll(ScrollDirection direction) {
         checkSupport(WebDriverType.MOBILE);
 
         try {
             try {
-                ((TouchableElement) seleniumElement()).swipe(direction, duration);
+                HashMap<String, String> scrollParam = new HashMap<>();
+                scrollParam.put("direction", direction.getValue());
+                scrollParam.put("element", ((HasIdentity) seleniumElement()).getId());
+                getWebDriver().executeScript("mobile: scroll", scrollParam);
             } catch (NoSuchElementException | StaleElementReferenceException e) {
                 waitFor().visible();
-                ((TouchableElement) seleniumElement()).swipe(direction, duration);
+                HashMap<String, String> scrollParam = new HashMap<>();
+                scrollParam.put("direction", direction.getValue());
+                scrollParam.put("element", ((HasIdentity) seleniumElement()).getId());
+                getWebDriver().executeScript("mobile: scroll", scrollParam);
             }
         } catch (WebDriverException e) {
             throw new EasyiumException(e.getMessage(), this);
