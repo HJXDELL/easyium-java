@@ -325,6 +325,12 @@ public abstract class WebDriver extends Context {
         ((TouchShortcuts) seleniumWebDriver()).swipe(startx, starty, endx, endy, duration);
     }
 
+    public void flick(int startx, int starty, int endx, int endy) {
+        checkSupport(WebDriverType.MOBILE);
+
+        createTouchAction().press(startx, starty).moveTo(endx, endy).release().perform();
+    }
+
     public byte[] pullFile(String remotePath) {
         checkSupport(WebDriverType.MOBILE);
 
