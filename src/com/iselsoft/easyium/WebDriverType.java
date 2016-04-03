@@ -1,12 +1,15 @@
 package com.iselsoft.easyium;
 
 
+import java.util.Arrays;
+import java.util.List;
+
 public enum WebDriverType {
     IE("ie"), FIREFOX("firefox"), CHROME("chrome"), OPERA("opera"), SAFARI("safari"), EDGE("edge"), ANDROID("android"), IOS("ios");
 
-    public final static WebDriverType[] BROWSER = new WebDriverType[]{IE, FIREFOX, CHROME, OPERA, SAFARI, EDGE};
+    public final static List<WebDriverType> BROWSER = Arrays.asList(IE, FIREFOX, CHROME, OPERA, SAFARI, EDGE);
 
-    public final static WebDriverType[] MOBILE = new WebDriverType[]{ANDROID, IOS};
+    public final static List<WebDriverType> MOBILE = Arrays.asList(ANDROID, IOS);
 
     private final String name;
 

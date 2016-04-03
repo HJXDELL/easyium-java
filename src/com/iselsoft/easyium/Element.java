@@ -317,10 +317,10 @@ public abstract class Element extends Context {
             throw new EasyiumException(e.getMessage(), this);
         }
     }
-    
+
     public void mouseOver() {
         checkSupport(WebDriverType.BROWSER);
-        
+
         String script = "var mouseoverEventObj = null;\n" +
                 "            if (typeof window.Event == \"function\") {\n" +
                 "                mouseoverEventObj = new MouseEvent('mouseover', {'bubbles': true, 'cancelable': true});\n" +
@@ -365,7 +365,7 @@ public abstract class Element extends Context {
             throw new EasyiumException(e.getMessage(), this);
         }
     }
-    
+
     public Point getLocation() {
         try {
             try {
@@ -405,19 +405,6 @@ public abstract class Element extends Context {
         }
     }
 
-    public String getCssValue(String propertyName) {
-        try {
-            try {
-                return seleniumElement().getCssValue(propertyName);
-            } catch (NoSuchElementException | StaleElementReferenceException e) {
-                waitFor().exists();
-                return seleniumElement().getCssValue(propertyName);
-            }
-        } catch (WebDriverException e) {
-            throw new EasyiumException(e.getMessage(), this);
-        }
-    }
-
     public Coordinates getCoordinates() {
         try {
             try {
@@ -425,6 +412,25 @@ public abstract class Element extends Context {
             } catch (NoSuchElementException | StaleElementReferenceException e) {
                 waitFor().exists();
                 return ((Locatable) seleniumElement()).getCoordinates();
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+
+    public Point getCenter() {
+        Point upperLeft = getLocation();
+        Dimension dimensions = getSize();
+        return new Point(upperLeft.getX() + dimensions.getWidth() / 2, upperLeft.getY() + dimensions.getHeight() / 2);
+    }
+
+    public String getCssValue(String propertyName) {
+        try {
+            try {
+                return seleniumElement().getCssValue(propertyName);
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().exists();
+                return seleniumElement().getCssValue(propertyName);
             }
         } catch (WebDriverException e) {
             throw new EasyiumException(e.getMessage(), this);
@@ -451,6 +457,71 @@ public abstract class Element extends Context {
             } catch (NoSuchElementException | StaleElementReferenceException e) {
                 waitFor().visible();
                 return seleniumElement().isEnabled();
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+
+    public void dragAndDropByOffset(int xOffset, int yOffset) {
+        try {
+            try {
+                if (WebDriverType.MOBILE.contains(getWebDriverType())) {
+                    getWebDriver().createTouchAction().longPress(seleniumElement()).moveTo(xOffset, yOffset).release().perform();
+                } else {
+                    getWebDriver().createActions().clickAndHold(seleniumElement()).moveByOffset(xOffset, yOffset).release().perform();
+                }
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().visible();
+                if (WebDriverType.MOBILE.contains(getWebDriverType())) {
+                    getWebDriver().createTouchAction().longPress(seleniumElement()).moveTo(xOffset, yOffset).release().perform();
+                } else {
+                    getWebDriver().createActions().clickAndHold(seleniumElement()).moveByOffset(xOffset, yOffset).release().perform();
+                }
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+
+    public void dragAndDropTo(Element targetElement) {
+        try {
+            try {
+                if (WebDriverType.MOBILE.contains(getWebDriverType())) {
+                    getWebDriver().createTouchAction().longPress(seleniumElement()).moveTo(targetElement.seleniumElement()).release().perform();
+                } else {
+                    getWebDriver().createActions().clickAndHold(seleniumElement()).moveToElement(targetElement.seleniumElement()).release().perform();
+                }
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().visible();
+                targetElement.waitFor().visible();
+                if (WebDriverType.MOBILE.contains(getWebDriverType())) {
+                    getWebDriver().createTouchAction().longPress(seleniumElement()).moveTo(targetElement.seleniumElement()).release().perform();
+                } else {
+                    getWebDriver().createActions().clickAndHold(seleniumElement()).moveToElement(targetElement.seleniumElement()).release().perform();
+                }
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+
+    public void dragAndDropToWithOffset(Element targetElement, int xOffset, int yOffset) {
+        try {
+            try {
+                if (WebDriverType.MOBILE.contains(getWebDriverType())) {
+                    getWebDriver().createTouchAction().longPress(seleniumElement()).moveTo(targetElement.seleniumElement(), xOffset, yOffset).release().perform();
+                } else {
+                    getWebDriver().createActions().clickAndHold(seleniumElement()).moveToElement(targetElement.seleniumElement(), xOffset, yOffset).release().perform();
+                }
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().visible();
+                targetElement.waitFor().visible();
+                if (WebDriverType.MOBILE.contains(getWebDriverType())) {
+                    getWebDriver().createTouchAction().longPress(seleniumElement()).moveTo(targetElement.seleniumElement(), xOffset, yOffset).release().perform();
+                } else {
+                    getWebDriver().createActions().clickAndHold(seleniumElement()).moveToElement(targetElement.seleniumElement(), xOffset, yOffset).release().perform();
+                }
             }
         } catch (WebDriverException e) {
             throw new EasyiumException(e.getMessage(), this);
