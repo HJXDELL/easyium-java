@@ -1,6 +1,7 @@
 package com.iselsoft.easyium.waiter.webdriver;
 
 import com.iselsoft.easyium.WebDriver;
+import io.appium.java_client.android.AndroidDriver;
 
 public class WebDriverActivityPresentCondition extends WebDriverCondition {
     private final String activity;
@@ -12,7 +13,7 @@ public class WebDriverActivityPresentCondition extends WebDriverCondition {
 
     @Override
     public boolean occurred() {
-        return true; // todo:
+        return ((AndroidDriver) webDriver.seleniumWebDriver()).currentActivity().equals(activity);
     }
 
     @Override

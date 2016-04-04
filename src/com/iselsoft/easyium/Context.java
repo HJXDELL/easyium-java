@@ -77,11 +77,11 @@ public abstract class Context {
         }
     }
 
-    protected void checkSupport(WebDriverType... webDriverTypes) {
+    public void checkSupport(WebDriverType... webDriverTypes) {
         checkSupport(new ArrayList<WebDriverType>(), webDriverTypes);
     }
 
-    protected void checkSupport(List<WebDriverType> webDriverTypeGroup, WebDriverType... webDriverTypes) {
+    public void checkSupport(List<WebDriverType> webDriverTypeGroup, WebDriverType... webDriverTypes) {
         WebDriverType currentWebDriverType = getWebDriverType();
         for (WebDriverType webDriverType : webDriverTypeGroup) {
             if (webDriverType == currentWebDriverType) {

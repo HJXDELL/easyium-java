@@ -1,6 +1,7 @@
 package com.iselsoft.easyium.waiter.webdriver;
 
 import com.iselsoft.easyium.WebDriver;
+import com.iselsoft.easyium.WebDriverType;
 import com.iselsoft.easyium.exceptions.WebDriverTimeoutException;
 
 public class WebDriverWaitFor {
@@ -54,5 +55,9 @@ public class WebDriverWaitFor {
         waitFor(new WebDriverURLEqualsConditioin(webDriver, url), interval, timeout);
     }
 
-    // todo: activity present
+    public void activityPresent(String activity) {
+        webDriver.checkSupport(WebDriverType.ANDROID);
+
+        waitFor(new WebDriverActivityPresentCondition(webDriver, activity), interval, timeout);
+    }
 }
