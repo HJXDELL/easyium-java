@@ -419,9 +419,8 @@ public abstract class Element extends Context {
     }
 
     public Point getCenter() {
-        Point upperLeft = getLocation();
-        Dimension dimensions = getSize();
-        return new Point(upperLeft.getX() + dimensions.getWidth() / 2, upperLeft.getY() + dimensions.getHeight() / 2);
+        Rectangle rect = getRect();
+        return new Point(rect.getX() + rect.getWidth() / 2, rect.getY() + rect.getHeight() / 2);
     }
 
     public String getCssValue(String propertyName) {
