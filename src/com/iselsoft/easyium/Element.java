@@ -395,10 +395,18 @@ public abstract class Element extends Context {
     public Rectangle getRect() {
         try {
             try {
-                return seleniumElement().getRect();
+                if (getWebDriverType() == WebDriverType.FIREFOX) {
+                    return seleniumElement().getRect();
+                } else {
+                    return new Rectangle(seleniumElement().getLocation(), seleniumElement().getSize());
+                }
             } catch (NoSuchElementException | StaleElementReferenceException e) {
                 waitFor().exists();
-                return seleniumElement().getRect();
+                if (getWebDriverType() == WebDriverType.FIREFOX) {
+                    return seleniumElement().getRect();
+                } else {
+                    return new Rectangle(seleniumElement().getLocation(), seleniumElement().getSize());
+                }
             }
         } catch (WebDriverException e) {
             throw new EasyiumException(e.getMessage(), this);
