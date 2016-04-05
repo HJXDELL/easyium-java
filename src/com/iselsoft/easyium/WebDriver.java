@@ -304,6 +304,10 @@ public abstract class WebDriver extends Context {
 
         ((Rotatable) seleniumWebDriver()).rotate(orientation);
     }
+    
+    public void setOrientation(ScreenOrientation orientation) {
+        rotate(orientation);
+    }
 
     public ScreenOrientation getOrientation() {
         checkSupport(WebDriverType.MOBILE);
