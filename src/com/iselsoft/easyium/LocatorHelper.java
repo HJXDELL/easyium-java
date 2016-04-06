@@ -6,7 +6,7 @@ import org.openqa.selenium.By;
 
 
 public class LocatorHelper {
-    public static By toBy(String locator) {
+    protected static By toBy(String locator) {
         String[] separatedLocator = locator.split("=", 2);
         if (separatedLocator.length != 2) {
             throw new InvalidLocatorException("Separator '=' is not found.");

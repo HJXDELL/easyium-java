@@ -3,7 +3,6 @@ package com.iselsoft.easyium;
 import com.iselsoft.easyium.exceptions.EasyiumException;
 import com.iselsoft.easyium.exceptions.NoSuchElementException;
 import com.iselsoft.easyium.waiter.element.ElementWaitFor;
-import io.appium.java_client.SwipeElementDirection;
 import io.appium.java_client.TouchableElement;
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.ios.IOSElement;

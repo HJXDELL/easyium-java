@@ -3,7 +3,7 @@ package com.iselsoft.easyium;
 import org.openqa.selenium.internal.HasIdentity;
 
 public class StaticElement extends Element {
-    protected StaticElement(Context parent, String locator) {
+    public StaticElement(Context parent, String locator) {
         super(parent);
         this.locator = locator;
     }
