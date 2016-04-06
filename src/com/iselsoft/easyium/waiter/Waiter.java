@@ -30,7 +30,12 @@ public class Waiter {
         }
 
         while ((System.currentTimeMillis() - startTime) <= timeout) {
-            Thread.sleep(interval);
+            try {
+                Thread.sleep(interval);
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                e.printStackTrace();
+            }
             if (condition.occurred()) {
                 return;
             }

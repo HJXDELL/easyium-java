@@ -27,6 +27,7 @@ public class ElementWaitFor {
             try {
                 Thread.sleep(interval);
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
                 e.printStackTrace();
             }
             if (condition.occurred() == desiredOccurrence) {

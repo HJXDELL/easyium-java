@@ -204,6 +204,7 @@ public abstract class Context {
             try {
                 Thread.sleep(getWaitInterval());
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
                 e.printStackTrace();
             }
             seleniumElements = findSeleniumElements(locator);

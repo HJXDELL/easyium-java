@@ -1,6 +1,8 @@
 package com.iselsoft.easyium;
 
 import com.google.gson.JsonObject;
+import com.iselsoft.easyium.exceptions.WebDriverTimeoutException;
+import com.iselsoft.easyium.waiter.Condition;
 import com.iselsoft.easyium.waiter.webdriver.WebDriverWaitFor;
 import io.appium.java_client.*;
 import io.appium.java_client.android.*;
@@ -19,9 +21,7 @@ import org.openqa.selenium.internal.Killable;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Set;
+import java.util.*;
 import java.util.concurrent.TimeUnit;
 
 public abstract class WebDriver extends Context {
@@ -170,6 +170,41 @@ public abstract class WebDriver extends Context {
             return WebDriver.this;
         }
 
+        public WebDriver newWindow(Set<String> previousWindowHandles) {
+
+            long startTime = System.currentTimeMillis();
+
+            Set<String> newWindowHandles = new LinkedHashSet<>();
+            for (String windowHandle : getWindowHandles()) {
+                if (!previousWindowHandles.contains(windowHandle)) {
+                    newWindowHandles.add(windowHandle);
+                }
+            }
+            if (!newWindowHandles.isEmpty()) {
+                return window(((String[]) newWindowHandles.toArray())[0]);
+            }
+
+            while ((System.currentTimeMillis() - startTime) <= getWaitTimeout()) {
+                try {
+                    Thread.sleep(getWaitInterval());
+                } catch (InterruptedException e) {
+                    Thread.currentThread().interrupt();
+                    e.printStackTrace();
+                }
+                newWindowHandles = new LinkedHashSet<>();
+                for (String windowHandle : getWindowHandles()) {
+                    if (!previousWindowHandles.contains(windowHandle)) {
+                        newWindowHandles.add(windowHandle);
+                    }
+                }
+                if (!newWindowHandles.isEmpty()) {
+                    return window(((String[]) newWindowHandles.toArray())[0]);
+                }
+            }
+
+            throw new WebDriverTimeoutException("Timed out waiting for new window opened in:", WebDriver.this);
+        }
+
         public WebDriver window(String nameOrHandle) {
             targetLocator.window(nameOrHandle);
             return WebDriver.this;
@@ -181,6 +216,7 @@ public abstract class WebDriver extends Context {
         }
 
         public Alert alert() {
+            waitFor().alertPresent();
             return targetLocator.alert();
         }
 
@@ -189,6 +225,15 @@ public abstract class WebDriver extends Context {
 
             ((ContextAware) seleniumWebDriver()).context(name);
             return WebDriver.this;
+        }
+    }
+
+    public boolean isAlertPresent() {
+        try {
+            String alertText = seleniumWebDriver().switchTo().alert().getText();
+            return true;
+        } catch (NoAlertPresentException e) {
+            return false;
         }
     }
 
@@ -304,7 +349,7 @@ public abstract class WebDriver extends Context {
 
         ((Rotatable) seleniumWebDriver()).rotate(orientation);
     }
-    
+
     public void setOrientation(ScreenOrientation orientation) {
         rotate(orientation);
     }
@@ -528,6 +573,7 @@ public abstract class WebDriver extends Context {
             try {
                 Thread.sleep(milliseconds);
             } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
                 e.printStackTrace();
             }
             unlock();
