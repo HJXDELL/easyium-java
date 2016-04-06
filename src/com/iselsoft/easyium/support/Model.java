@@ -47,7 +47,7 @@ public class Model {
                     "Element or StaticElement or subclass of Control.");
         }
         Class<?> superclass = thisClass.getSuperclass();
-        if (!superclass.getPackage().getName().equals("com.iselsoft.easyium.support")) {
+        if (!superclass.equals(Control.class) && !superclass.equals(Page.class)) {
             initElements(superclass);
         }
     }
