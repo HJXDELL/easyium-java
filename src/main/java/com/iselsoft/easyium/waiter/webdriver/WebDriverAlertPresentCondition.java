@@ -12,7 +12,7 @@ public class WebDriverAlertPresentCondition extends WebDriverCondition {
     @Override
     public boolean occurred() {
         try {
-            String alertText = webDriver.seleniumWebDriver().switchTo().alert().getText();
+            webDriver.seleniumWebDriver().switchTo().alert();
             return true;
         } catch (NoAlertPresentException e) {
             return false;
