@@ -38,19 +38,35 @@ public class ElementWaitFor {
         throw new ElementTimeoutException(String.format("Timed out waiting for <%s> to be <%s>.", condition, desiredOccurrence));
     }
 
+    /**
+     * Wait for not.
+     * 
+     * @return this ElementWaitFor instance
+     */
     public ElementWaitFor not() {
         desiredOccurrence = !desiredOccurrence;
         return this;
     }
 
+    /**
+     * Wait for this element exists.
+     */
     public void exists() {
         this.waitFor(new ElementExistenceCondition(element), interval, timeout);
     }
 
+    /**
+     * Wait for this element visible.
+     */
     public void visible() {
         this.waitFor(new ElementVisibleCondition(element), interval, timeout);
     }
 
+    /**
+     * Wait for this element's text equals the expected text.
+     * 
+     * @param text the expected text
+     */
     public void textEquals(String text) {
         long startTime = System.currentTimeMillis();
         element.waitFor(interval, timeout).exists();
@@ -58,6 +74,12 @@ public class ElementWaitFor {
         this.waitFor(new ElementTextEqualsCondition(element, text), interval, restTimeout);
     }
 
+    /**
+     * Wait for this element's attribute value equals the expected value.
+     * 
+     * @param attribute the attribute of this element
+     * @param value the expected value
+     */
     public void attributeEquals(String attribute, String value) {
         long startTime = System.currentTimeMillis();
         element.waitFor(interval, timeout).exists();
@@ -65,6 +87,12 @@ public class ElementWaitFor {
         this.waitFor(new ElementAttributeEqualsCondition(element, attribute, value), interval, restTimeout);
     }
 
+    /**
+     * Wait for this element's attribute value contains one of the value list.
+     * 
+     * @param attribute the attribute of this element
+     * @param values the expected values
+     */
     public void attributeContainsOne(String attribute, String... values) {
         long startTime = System.currentTimeMillis();
         element.waitFor(interval, timeout).exists();
@@ -72,6 +100,12 @@ public class ElementWaitFor {
         this.waitFor(new ElementAttributeContainsOneCondition(element, attribute, values), interval, restTimeout);
     }
 
+    /**
+     * Wait for this element's attribute value contains all of the value list.
+     * 
+     * @param attribute the attribute of this element
+     * @param values the expected values
+     */
     public void attributeContainsAll(String attribute, String... values) {
         long startTime = System.currentTimeMillis();
         element.waitFor(interval, timeout).exists();
