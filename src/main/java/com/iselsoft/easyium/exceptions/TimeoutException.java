@@ -6,7 +6,7 @@ public class TimeoutException extends EasyiumException {
     public TimeoutException(String message) {
         super(message);
     }
-    
+
     public TimeoutException(String message, Context context) {
         super(message, context);
     }

@@ -6,7 +6,7 @@ public class ElementTimeoutException extends TimeoutException {
     public ElementTimeoutException(String message) {
         super(message);
     }
-    
+
     public ElementTimeoutException(String message, Element element) {
         super(message, element);
     }

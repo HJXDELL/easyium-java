@@ -2,12 +2,11 @@ package com.iselsoft.easyium;
 
 import com.google.gson.JsonObject;
 import com.iselsoft.easyium.exceptions.WebDriverTimeoutException;
-import com.iselsoft.easyium.waiter.Condition;
 import com.iselsoft.easyium.waiter.webdriver.WebDriverWaitFor;
 import io.appium.java_client.*;
 import io.appium.java_client.android.*;
 import io.appium.java_client.android.AndroidDriver;
-import io.appium.java_client.ios.*;
+import io.appium.java_client.ios.IOSDeviceActionShortcuts;
 import io.appium.java_client.ios.IOSDriver;
 import org.openqa.selenium.*;
 import org.openqa.selenium.WebDriver.Navigation;
@@ -21,7 +20,10 @@ import org.openqa.selenium.internal.Killable;
 import org.openqa.selenium.remote.RemoteWebDriver;
 
 import java.net.URL;
-import java.util.*;
+import java.util.HashMap;
+import java.util.LinkedHashSet;
+import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.TimeUnit;
 
 public abstract class WebDriver extends Context {
