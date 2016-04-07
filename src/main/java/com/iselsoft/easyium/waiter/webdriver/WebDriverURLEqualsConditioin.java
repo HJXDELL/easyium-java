@@ -5,7 +5,7 @@ import com.iselsoft.easyium.WebDriver;
 public class WebDriverURLEqualsConditioin extends WebDriverCondition {
     private final String url;
 
-    public WebDriverURLEqualsConditioin(WebDriver webDriver, String url) {
+    protected WebDriverURLEqualsConditioin(WebDriver webDriver, String url) {
         super(webDriver);
         this.url = url;
     }

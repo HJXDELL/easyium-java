@@ -14,6 +14,9 @@ public class StaticElement extends Element {
         this.seleniumElement = getParent().findSeleniumElement(locator);
     }
 
+    /**
+     * StaticElement already has a locator.
+     */
     @Override
     public void persist() {
         getParent().persist();

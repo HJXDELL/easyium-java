@@ -25,6 +25,9 @@ public class DynamicElement extends Element {
         seleniumElement = getParent().findSeleniumElement(locator);
     }
 
+    /**
+     * Generate the locator of this element by identifier, so this element can auto-refresh.
+     */
     @Override
     public void persist() {
         getParent().persist();

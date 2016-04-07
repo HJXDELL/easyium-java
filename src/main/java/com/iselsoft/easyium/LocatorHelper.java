@@ -4,7 +4,24 @@ import com.iselsoft.easyium.exceptions.InvalidLocatorException;
 import io.appium.java_client.MobileBy;
 import org.openqa.selenium.By;
 
-
+/**
+ * This helper is used to convert locator to {@link org.openqa.selenium.By}. 
+ * <p>
+ * The format of locator is: "by=value", the possible values of "by" are:
+ * <pre>
+ * "id": By.id()
+ * "xpath": By.xpath()
+ * "link": By.linkText()
+ * "partial_link": By.partialLinkText()
+ * "name": By.name()
+ * "tag": By.tagName()
+ * "class": By.className()
+ * "css": By.cssSelector()
+ * "ios_uiautomation": MobileBy.IosUIAutomation()
+ * "android_uiautomation": MobileBy.AndroidUIAutomator()
+ * "accessibility_id": MobileBy.AccessibilityId()
+ * </pre>
+ */
 public class LocatorHelper {
     protected static By toBy(String locator) {
         String[] separatedLocator = locator.split("=", 2);

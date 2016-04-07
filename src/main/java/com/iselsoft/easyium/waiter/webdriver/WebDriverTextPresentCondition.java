@@ -6,7 +6,7 @@ import org.openqa.selenium.By;
 public class WebDriverTextPresentCondition extends WebDriverCondition {
     private final String text;
 
-    public WebDriverTextPresentCondition(WebDriver webDriver, String text) {
+    protected WebDriverTextPresentCondition(WebDriver webDriver, String text) {
         super(webDriver);
         this.text = text;
     }

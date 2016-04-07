@@ -5,7 +5,7 @@ import org.openqa.selenium.NoAlertPresentException;
 
 public class WebDriverAlertPresentCondition extends WebDriverCondition {
 
-    public WebDriverAlertPresentCondition(WebDriver webDriver) {
+    protected WebDriverAlertPresentCondition(WebDriver webDriver) {
         super(webDriver);
     }
 

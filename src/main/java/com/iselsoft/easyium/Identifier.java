@@ -1,5 +1,17 @@
 package com.iselsoft.easyium;
 
+/**
+ * Identifier is a interface to generate the locator of the found element, you can get the standard ones in this.
+ * Otherwise, you can create one like this:
+ * <pre>
+ * context.findElement("class=foo", new Identifier() {
+ *      {@literal @}Override
+ *      public String identify(Element element) {
+ *          return String.format("xpath=.//*[@attr='%s']", element.getAttribute("attr"));
+ *      }
+ * });
+ * <pre/>
+ */
 public interface Identifier {
     Identifier id = new Identifier() {
         @Override

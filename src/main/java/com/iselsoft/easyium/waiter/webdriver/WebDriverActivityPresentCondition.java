@@ -6,7 +6,7 @@ import io.appium.java_client.android.AndroidDriver;
 public class WebDriverActivityPresentCondition extends WebDriverCondition {
     private final String activity;
 
-    public WebDriverActivityPresentCondition(WebDriver webDriver, String activity) {
+    protected WebDriverActivityPresentCondition(WebDriver webDriver, String activity) {
         super(webDriver);
         this.activity = activity;
     }

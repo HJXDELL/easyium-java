@@ -6,7 +6,7 @@ import com.iselsoft.easyium.waiter.Condition;
 public abstract class WebDriverCondition implements Condition {
     protected final WebDriver webDriver;
 
-    public WebDriverCondition(WebDriver webDriver) {
+    protected WebDriverCondition(WebDriver webDriver) {
         this.webDriver = webDriver;
     }
 

@@ -67,28 +67,55 @@ public abstract class WebDriver extends Context {
     public void persist() {
     } // do nothing
 
+    /**
+     * Get a WebDriverWaitFor instance with this driver's wait interval and timeout.
+     *
+     * @return WebDriverWaitFor instance
+     */
     public WebDriverWaitFor waitFor() {
         return waitFor(getWaitInterval(), getWaitTimeout());
     }
 
+    /**
+     * Get a WebDriverWaitFor instance with this driver's wait interval.
+     *
+     * @param timeout the wait timeout in milliseconds
+     * @return WebDriverWaitFor instance
+     */
     public WebDriverWaitFor waitFor(long timeout) {
         return waitFor(getWaitInterval(), timeout);
     }
 
+    /**
+     * Get a WebDriverWaitFor instance.
+     *
+     * @param interval the wait interval in milliseconds
+     * @param timeout  the wait timeout in milliseconds
+     * @return WebDriverWaitFor instance
+     */
     public WebDriverWaitFor waitFor(long interval, long timeout) {
         return new WebDriverWaitFor(this, interval, timeout);
     }
 
+    /**
+     * @return a new {@link Actions} instance
+     */
     public Actions createActions() {
         return new Actions(seleniumWebDriver());
     }
 
+    /**
+     * @return a new {@link TouchAction} instance
+     */
     public TouchAction createTouchAction() {
         checkSupport(WebDriverType.MOBILE);
 
         return new TouchAction((MobileDriver) seleniumWebDriver());
     }
 
+    /**
+     * @return a new {@link MultiTouchAction} instance
+     */
     public MultiTouchAction createMultiTouchAction() {
         checkSupport(WebDriverType.MOBILE);
 
@@ -259,7 +286,7 @@ public abstract class WebDriver extends Context {
          *
          * @param frameElement The frame element to switch to.
          * @return This driver focused on the given frame.
-         * @throws NoSuchFrameException If the given element is neither an IFRAME nor a FRAME element.
+         * @throws NoSuchFrameException    If the given element is neither an IFRAME nor a FRAME element.
          * @throws ElementTimeoutException If the Element doesn't exist within timeout
          */
         public WebDriver frame(Element frameElement) {
@@ -282,11 +309,12 @@ public abstract class WebDriver extends Context {
         /**
          * Switch the focus of future commands for this driver to the new opened window.
          * <p>
-         * Example:<pre>{@code
-         *   Set<String> previousWindowHandles = webDriver.getWindowHandles();
+         * Example:
+         * <pre>
+         *   Set{@literal <}String{@literal >} previousWindowHandles = webDriver.getWindowHandles();
          *   // do something to open a new window
          *   webDriver.switchTo().newWindow(previousWindowHandles);
-         * }</pre>
+         * </pre>
          * </p>
          *
          * @param previousWindowHandles The previous window handles as returned by {@link #getWindowHandles()}
@@ -1178,7 +1206,7 @@ public abstract class WebDriver extends Context {
     }
 
     /**
-     * Toggle the location services on the device. 
+     * Toggle the location services on the device.
      * <p><b>Supported by ANDROID</b></p>
      */
     public void toggleLocationServices() {

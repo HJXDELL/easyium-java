@@ -6,7 +6,7 @@ import com.iselsoft.easyium.waiter.Condition;
 public abstract class ElementCondition implements Condition {
     protected final Element element;
 
-    public ElementCondition(Element element) {
+    protected ElementCondition(Element element) {
         this.element = element;
     }
 
