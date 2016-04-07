@@ -473,14 +473,14 @@ public abstract class Element extends Context {
         try {
             try {
                 if (WebDriverType.MOBILE.contains(getWebDriverType())) {
-                    getWebDriver().createTouchAction().longPress(seleniumElement()).moveTo(xOffset, yOffset).release().perform();
+                    getWebDriver().createTouchAction().longPress(seleniumElement(), 1000).moveTo(xOffset, yOffset).release().perform();
                 } else {
                     getWebDriver().createActions().clickAndHold(seleniumElement()).moveByOffset(xOffset, yOffset).release().perform();
                 }
             } catch (NoSuchElementException | StaleElementReferenceException e) {
                 waitFor().visible();
                 if (WebDriverType.MOBILE.contains(getWebDriverType())) {
-                    getWebDriver().createTouchAction().longPress(seleniumElement()).moveTo(xOffset, yOffset).release().perform();
+                    getWebDriver().createTouchAction().longPress(seleniumElement(), 1000).moveTo(xOffset, yOffset).release().perform();
                 } else {
                     getWebDriver().createActions().clickAndHold(seleniumElement()).moveByOffset(xOffset, yOffset).release().perform();
                 }
@@ -494,7 +494,7 @@ public abstract class Element extends Context {
         try {
             try {
                 if (WebDriverType.MOBILE.contains(getWebDriverType())) {
-                    getWebDriver().createTouchAction().longPress(seleniumElement()).moveTo(targetElement.seleniumElement()).release().perform();
+                    getWebDriver().createTouchAction().longPress(seleniumElement(), 1000).moveTo(targetElement.seleniumElement()).release().perform();
                 } else {
                     getWebDriver().createActions().clickAndHold(seleniumElement()).moveToElement(targetElement.seleniumElement()).release().perform();
                 }
@@ -502,7 +502,7 @@ public abstract class Element extends Context {
                 waitFor().visible();
                 targetElement.waitFor().visible();
                 if (WebDriverType.MOBILE.contains(getWebDriverType())) {
-                    getWebDriver().createTouchAction().longPress(seleniumElement()).moveTo(targetElement.seleniumElement()).release().perform();
+                    getWebDriver().createTouchAction().longPress(seleniumElement(), 1000).moveTo(targetElement.seleniumElement()).release().perform();
                 } else {
                     getWebDriver().createActions().clickAndHold(seleniumElement()).moveToElement(targetElement.seleniumElement()).release().perform();
                 }
@@ -516,7 +516,7 @@ public abstract class Element extends Context {
         try {
             try {
                 if (WebDriverType.MOBILE.contains(getWebDriverType())) {
-                    getWebDriver().createTouchAction().longPress(seleniumElement()).moveTo(targetElement.seleniumElement(), xOffset, yOffset).release().perform();
+                    getWebDriver().createTouchAction().longPress(seleniumElement(), 1000).moveTo(targetElement.seleniumElement(), xOffset, yOffset).release().perform();
                 } else {
                     getWebDriver().createActions().clickAndHold(seleniumElement()).moveToElement(targetElement.seleniumElement(), xOffset, yOffset).release().perform();
                 }
@@ -524,7 +524,7 @@ public abstract class Element extends Context {
                 waitFor().visible();
                 targetElement.waitFor().visible();
                 if (WebDriverType.MOBILE.contains(getWebDriverType())) {
-                    getWebDriver().createTouchAction().longPress(seleniumElement()).moveTo(targetElement.seleniumElement(), xOffset, yOffset).release().perform();
+                    getWebDriver().createTouchAction().longPress(seleniumElement(), 1000).moveTo(targetElement.seleniumElement(), xOffset, yOffset).release().perform();
                 } else {
                     getWebDriver().createActions().clickAndHold(seleniumElement()).moveToElement(targetElement.seleniumElement(), xOffset, yOffset).release().perform();
                 }
@@ -549,15 +549,38 @@ public abstract class Element extends Context {
         }
     }
 
+    public void doubleTap() {
+        checkSupport(WebDriverType.MOBILE);
+
+        try {
+            try {
+                HashMap<String, String> tapParams = new HashMap<>();
+                tapParams.put("tapCount", "2");
+                tapParams.put("duration", "");
+                tapParams.put("element", ((HasIdentity) seleniumElement()).getId());
+                getWebDriver().executeScript("mobile: tap", tapParams);
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().visible();
+                HashMap<String, String> tapParams = new HashMap<>();
+                tapParams.put("tapCount", "2");
+                tapParams.put("duration", "");
+                tapParams.put("element", ((HasIdentity) seleniumElement()).getId());
+                getWebDriver().executeScript("mobile: tap", tapParams);
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+
     public void longPress() {
         checkSupport(WebDriverType.MOBILE);
 
         try {
             try {
-                getWebDriver().createTouchAction().longPress(seleniumElement()).perform();
+                getWebDriver().createTouchAction().longPress(seleniumElement()).release().perform();
             } catch (NoSuchElementException | StaleElementReferenceException e) {
                 waitFor().visible();
-                getWebDriver().createTouchAction().longPress(seleniumElement()).perform();
+                getWebDriver().createTouchAction().longPress(seleniumElement()).release().perform();
             }
         } catch (WebDriverException e) {
             throw new EasyiumException(e.getMessage(), this);
@@ -569,10 +592,10 @@ public abstract class Element extends Context {
 
         try {
             try {
-                getWebDriver().createTouchAction().longPress(seleniumElement(), duration).perform();
+                getWebDriver().createTouchAction().longPress(seleniumElement(), duration).release().perform();
             } catch (NoSuchElementException | StaleElementReferenceException e) {
                 waitFor().visible();
-                getWebDriver().createTouchAction().longPress(seleniumElement(), duration).perform();
+                getWebDriver().createTouchAction().longPress(seleniumElement(), duration).release().perform();
             }
         } catch (WebDriverException e) {
             throw new EasyiumException(e.getMessage(), this);
