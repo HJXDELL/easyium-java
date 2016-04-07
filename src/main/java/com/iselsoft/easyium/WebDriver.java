@@ -1,9 +1,10 @@
 package com.iselsoft.easyium;
 
 import com.google.gson.JsonObject;
-import com.iselsoft.easyium.exceptions.WebDriverTimeoutException;
+import com.iselsoft.easyium.exceptions.*;
 import com.iselsoft.easyium.waiter.webdriver.WebDriverWaitFor;
 import io.appium.java_client.*;
+import io.appium.java_client.NoSuchContextException;
 import io.appium.java_client.android.*;
 import io.appium.java_client.android.AndroidDriver;
 import io.appium.java_client.ios.IOSDeviceActionShortcuts;
@@ -11,6 +12,7 @@ import io.appium.java_client.ios.IOSDriver;
 import org.openqa.selenium.*;
 import org.openqa.selenium.WebDriver.Navigation;
 import org.openqa.selenium.WebDriver.Options;
+import org.openqa.selenium.WebDriver.Timeouts;
 import org.openqa.selenium.html5.*;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.interactions.HasInputDevices;
@@ -100,7 +102,7 @@ public abstract class WebDriver extends Context {
      * "rest" for any duration of time, it is best to wait until this timeout is over, since should
      * the underlying page change whilst your test is executing the results of future calls against
      * this interface will be against the freshly loaded page. Synonym for
-     * {@link org.openqa.selenium.WebDriver.Navigation#to(String)}.
+     * {@link Navigation#to(String)}.
      *
      * @param url The URL to load. It is best to use a fully qualified URL
      */
@@ -197,7 +199,7 @@ public abstract class WebDriver extends Context {
      * Gets the Option interface
      *
      * @return An option interface
-     * @see org.openqa.selenium.WebDriver.Options
+     * @see Options
      */
     public Options manage() {
         return seleniumWebDriver().manage();
@@ -231,7 +233,7 @@ public abstract class WebDriver extends Context {
          *
          * @param index (zero-based) index
          * @return This driver focused on the given frame
-         * @throws org.openqa.selenium.NoSuchFrameException If the frame cannot be found
+         * @throws NoSuchFrameException If the frame cannot be found
          */
         public WebDriver frame(int index) {
             targetLocator.frame(index);
@@ -245,7 +247,7 @@ public abstract class WebDriver extends Context {
          * @param nameOrId the name of the frame window, the id of the &lt;frame&gt; or &lt;iframe&gt;
          *                 element, or the (zero-based) index
          * @return This driver focused on the given frame
-         * @throws org.openqa.selenium.NoSuchFrameException If the frame cannot be found
+         * @throws NoSuchFrameException If the frame cannot be found
          */
         public WebDriver frame(String nameOrId) {
             targetLocator.frame(nameOrId);
@@ -253,13 +255,12 @@ public abstract class WebDriver extends Context {
         }
 
         /**
-         * Select a frame using {@link com.iselsoft.easyium.Element}.
+         * Select a frame using {@link Element}.
          *
          * @param frameElement The frame element to switch to.
          * @return This driver focused on the given frame.
-         * @throws org.openqa.selenium.NoSuchFrameException                If the given element is neither an IFRAME nor a FRAME element.
-         * @throws com.iselsoft.easyium.exceptions.ElementTimeoutException If the Element doesn't exist within timeout
-         * @see com.iselsoft.easyium.Element
+         * @throws NoSuchFrameException If the given element is neither an IFRAME nor a FRAME element.
+         * @throws ElementTimeoutException If the Element doesn't exist within timeout
          */
         public WebDriver frame(Element frameElement) {
             frameElement.waitFor().exists();
@@ -290,7 +291,7 @@ public abstract class WebDriver extends Context {
          *
          * @param previousWindowHandles The previous window handles as returned by {@link #getWindowHandles()}
          * @return This driver focused on the new window
-         * @throws com.iselsoft.easyium.exceptions.WebDriverTimeoutException If no new window opened within timeout
+         * @throws WebDriverTimeoutException If no new window opened within timeout
          */
         public WebDriver newWindow(Set<String> previousWindowHandles) {
 
@@ -333,7 +334,7 @@ public abstract class WebDriver extends Context {
          * @param nameOrHandle The name of the window or the handle as returned by
          *                     {@link #getWindowHandles()}
          * @return This driver focused on the given window
-         * @throws org.openqa.selenium.NoSuchWindowException If the window cannot be found
+         * @throws NoSuchWindowException If the window cannot be found
          */
         public WebDriver window(String nameOrHandle) {
             targetLocator.window(nameOrHandle);
@@ -355,7 +356,7 @@ public abstract class WebDriver extends Context {
          * Switches to the currently active modal dialog for this particular driver instance.
          *
          * @return A handle to the dialog.
-         * @throws org.openqa.selenium.NoAlertPresentException If the dialog cannot be found
+         * @throws NoAlertPresentException If the dialog cannot be found
          */
         public Alert alert() {
             waitFor().alertPresent();
@@ -368,7 +369,7 @@ public abstract class WebDriver extends Context {
          *
          * @param name The name of the context as returned by {@link #getContexts()}.
          * @return This driver focused on the given context.
-         * @throws io.appium.java_client.NoSuchContextException If the context cannot be found.
+         * @throws NoSuchContextException If the context cannot be found.
          */
         public WebDriver context(String name) {
             WebDriver.this.checkSupport(WebDriverType.MOBILE);
@@ -394,7 +395,7 @@ public abstract class WebDriver extends Context {
      * An abstraction allowing the driver to access the browser's history and to navigate to a given
      * URL.
      *
-     * @return A {@link org.openqa.selenium.WebDriver.Navigation} that allows the selection of what to
+     * @return A {@link Navigation} that allows the selection of what to
      * do next
      */
     public Navigation navigate() {
@@ -473,7 +474,7 @@ public abstract class WebDriver extends Context {
      * <p/>
      * The default timeout for a script to be executed is 0ms. In most cases, including the examples
      * below, one must set the script timeout
-     * {@link org.openqa.selenium.WebDriver.Timeouts#setScriptTimeout(long, java.util.concurrent.TimeUnit)}  beforehand
+     * {@link Timeouts#setScriptTimeout(long, java.util.concurrent.TimeUnit)}  beforehand
      * to a value sufficiently large enough.
      * <p/>
      * <p/>
@@ -522,7 +523,7 @@ public abstract class WebDriver extends Context {
      * @param script The JavaScript to execute.
      * @param args   The arguments to the script. May be empty.
      * @return One of Boolean, Long, String, List, WebElement, or null.
-     * @see org.openqa.selenium.WebDriver.Timeouts#setScriptTimeout(long, java.util.concurrent.TimeUnit)
+     * @see Timeouts#setScriptTimeout(long, java.util.concurrent.TimeUnit)
      */
     public Object executeAsyncScript(String script, Object... args) {
         Object[] convertedArgs = new Object[args.length];
@@ -539,21 +540,21 @@ public abstract class WebDriver extends Context {
     }
 
     /**
-     * @return the {@link org.openqa.selenium.interactions.Keyboard} of current driver
+     * @return the {@link Keyboard} of current driver
      */
     public Keyboard getKeyboard() {
         return ((HasInputDevices) seleniumWebDriver()).getKeyboard();
     }
 
     /**
-     * @return the {@link org.openqa.selenium.interactions.Mouse} of current driver
+     * @return the {@link Mouse} of current driver
      */
     public Mouse getMouse() {
         return ((HasInputDevices) seleniumWebDriver()).getMouse();
     }
 
     /**
-     * @return the {@link org.openqa.selenium.Capabilities} of the current driver
+     * @return the {@link Capabilities} of the current driver
      */
     public Capabilities getCapabilities() {
         return ((HasCapabilities) seleniumWebDriver()).getCapabilities();
@@ -574,7 +575,7 @@ public abstract class WebDriver extends Context {
     /**
      * Scrolls the device to direction.
      * It will try to scroll in the first element of type scroll view, table or collection view it finds.
-     * If you want to scroll in element, please use {@link com.iselsoft.easyium.Element#scroll(com.iselsoft.easyium.ScrollDirection)}
+     * If you want to scroll in element, please use {@link Element#scroll(com.iselsoft.easyium.ScrollDirection)}
      *
      * @param direction the direction to scroll
      */
@@ -587,7 +588,7 @@ public abstract class WebDriver extends Context {
     }
 
     /**
-     * Scroll to {@link com.iselsoft.easyium.Element}
+     * Scroll to {@link Element}
      *
      * @param element the element to be scrolled to
      */
@@ -608,7 +609,7 @@ public abstract class WebDriver extends Context {
     /**
      * <p><b>Supported by MOBILE, CHROME, OPERA</b></p>
      *
-     * @return the {@link org.openqa.selenium.html5.Location} of current driver
+     * @return the {@link Location} of current driver
      */
     public Location getLocation() {
         checkSupport(WebDriverType.MOBILE, WebDriverType.CHROME, WebDriverType.OPERA);
@@ -631,7 +632,7 @@ public abstract class WebDriver extends Context {
     /**
      * <p><b>Supported by CHROME, OPERA</b></p>
      *
-     * @return the {@link org.openqa.selenium.html5.LocalStorage} of current driver
+     * @return the {@link LocalStorage} of current driver
      */
     public LocalStorage getLocalStorage() {
         checkSupport(WebDriverType.CHROME, WebDriverType.OPERA);
@@ -642,7 +643,7 @@ public abstract class WebDriver extends Context {
     /**
      * <p><b>Supported by CHROME, OPERA</b></p>
      *
-     * @return the {@link org.openqa.selenium.html5.SessionStorage} of current driver
+     * @return the {@link SessionStorage} of current driver
      */
     public SessionStorage getSessionStorage() {
         checkSupport(WebDriverType.CHROME, WebDriverType.OPERA);
@@ -689,7 +690,7 @@ public abstract class WebDriver extends Context {
     }
 
     /**
-     * Alias for {@link #rotate(org.openqa.selenium.ScreenOrientation)}
+     * Alias for {@link #rotate(ScreenOrientation)}
      * <p><b>Supported by MOBILE</b></p>
      */
     public void setOrientation(ScreenOrientation orientation) {
@@ -699,7 +700,7 @@ public abstract class WebDriver extends Context {
     /**
      * <p><b>Supported by MOBILE</b></p>
      *
-     * @return the current {@link org.openqa.selenium.ScreenOrientation} of the web driver
+     * @return the current {@link ScreenOrientation} of the web driver
      */
     public ScreenOrientation getOrientation() {
         checkSupport(WebDriverType.MOBILE);
@@ -931,7 +932,7 @@ public abstract class WebDriver extends Context {
     /**
      * <p><b>Supported by MOBILE</b></p>
      *
-     * @return the {@link java.net.URL} of remote server
+     * @return the {@link URL} of remote server
      */
     public URL getRemoteAddress() {
         checkSupport(WebDriverType.MOBILE);
@@ -944,7 +945,7 @@ public abstract class WebDriver extends Context {
      * <p><b>Supported by ANDROID</b></p>
      *
      * @param key code for the key pressed on the device
-     * @see io.appium.java_client.android.AndroidKeyCode
+     * @see AndroidKeyCode
      */
     public void pressKeyCode(int key) {
         checkSupport(WebDriverType.ANDROID);
@@ -959,8 +960,8 @@ public abstract class WebDriver extends Context {
      *
      * @param key       code for the key pressed on the Android device
      * @param metastate metastate for the keypress
-     * @see io.appium.java_client.android.AndroidKeyCode
-     * @see io.appium.java_client.android.AndroidKeyMetastate
+     * @see AndroidKeyCode
+     * @see AndroidKeyMetastate
      */
     public void pressKeyCode(int key, Integer metastate) {
         checkSupport(WebDriverType.ANDROID);
@@ -973,7 +974,7 @@ public abstract class WebDriver extends Context {
      * <p><b>Supported by ANDROID</b></p>
      *
      * @param key code for the key pressed on the device
-     * @see io.appium.java_client.android.AndroidKeyCode
+     * @see AndroidKeyCode
      */
     public void longPressKeyCode(int key) {
         checkSupport(WebDriverType.ANDROID);
@@ -988,8 +989,8 @@ public abstract class WebDriver extends Context {
      *
      * @param key       code for the key pressed on the Android device
      * @param metastate metastate for the keypress
-     * @see io.appium.java_client.android.AndroidKeyCode
-     * @see io.appium.java_client.android.AndroidKeyMetastate
+     * @see AndroidKeyCode
+     * @see AndroidKeyMetastate
      */
     public void longPressKeyCode(int key, Integer metastate) {
         checkSupport(WebDriverType.ANDROID);
@@ -1001,7 +1002,7 @@ public abstract class WebDriver extends Context {
      * Get the current network settings of the device.
      * <p><b>Supported by ANDROID</b></p>
      *
-     * @return {@link io.appium.java_client.NetworkConnectionSetting} objects will let you inspect the status
+     * @return {@link NetworkConnectionSetting} objects will let you inspect the status
      * of AirplaneMode, Wifi, Data connections
      */
     public NetworkConnectionSetting getNetworkConnection() {
