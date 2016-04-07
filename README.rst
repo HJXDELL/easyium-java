@@ -29,7 +29,7 @@ Glossary
 --------
 WebDriver
 ~~~~~~~~~
-It is a wrapper for selenium&appium's web driver. You can create a new instance by providing web driver type.
+It is a wrapper for selenium&appium's web driver.
 
 DynamicElement
 ~~~~~~~~~~~~~~
