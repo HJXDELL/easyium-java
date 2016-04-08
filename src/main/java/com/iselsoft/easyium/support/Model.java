@@ -9,9 +9,12 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
 
-public class Model {
-    protected final Context context;
-    public final WebDriver webDriver;
+/**
+ * Used to model all objects in your page.
+ */
+public abstract class Model {
+    private final Context context;
+    protected final WebDriver webDriver;
 
     protected Model(Context context) throws ReflectiveOperationException {
         this.context = context;

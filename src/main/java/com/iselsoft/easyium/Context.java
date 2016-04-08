@@ -11,12 +11,14 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class Context {
+    public static final long UNSET_WAIT_TIME = Long.MIN_VALUE;
+    
     private long waitInterval;
     private long waitTimeout;
 
     protected Context() {
-        waitInterval = -568522662;
-        waitTimeout = -568522662;
+        waitInterval = UNSET_WAIT_TIME;
+        waitTimeout = UNSET_WAIT_TIME;
     }
 
     /**
@@ -46,7 +48,7 @@ public abstract class Context {
      * @return the wait interval
      */
     public long getWaitInterval() {
-        if (waitInterval == -568522662) {
+        if (waitInterval == UNSET_WAIT_TIME) {
             return getWebDriver().getWaitInterval();
         }
         return waitInterval;
@@ -67,7 +69,7 @@ public abstract class Context {
      * @return the wait timeout
      */
     public long getWaitTimeout() {
-        if (waitTimeout == -568522662) {
+        if (waitTimeout == UNSET_WAIT_TIME) {
             return getWebDriver().getWaitTimeout();
         }
         return waitTimeout;

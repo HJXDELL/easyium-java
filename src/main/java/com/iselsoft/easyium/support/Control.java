@@ -2,10 +2,13 @@ package com.iselsoft.easyium.support;
 
 import com.iselsoft.easyium.Element;
 
+/**
+ * Your modeling class for control should inherit this class.
+ */
 public class Control extends Model {
-    public final Element element;
+    protected final Element element;
 
-    public Control(Element element) throws ReflectiveOperationException {
+    protected Control(Element element) throws ReflectiveOperationException {
         super(element);
         this.element = element;
     }

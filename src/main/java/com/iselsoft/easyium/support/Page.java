@@ -2,8 +2,11 @@ package com.iselsoft.easyium.support;
 
 import com.iselsoft.easyium.WebDriver;
 
+/**
+ * Your modeling class for control should inherit this class.
+ */
 public class Page extends Model {
-    public Page(WebDriver webDriver) throws ReflectiveOperationException {
+    protected Page(WebDriver webDriver) throws ReflectiveOperationException {
         super(webDriver);
     }
 }
