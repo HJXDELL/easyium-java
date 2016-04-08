@@ -7,7 +7,7 @@ package com.iselsoft.easyium;
  * context.findElement("class=foo", new Identifier() {
  *      {@literal @}Override
  *      public String identify(Element element) {
- *          return String.format("xpath=.//*[@attr='%s']", element.getAttribute("attr"));
+ *          return String.format("xpath=.//*[@bar='%s']", element.getAttribute("bar"));
  *      }
  * });
  * <pre/>

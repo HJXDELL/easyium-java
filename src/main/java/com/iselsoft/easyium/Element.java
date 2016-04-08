@@ -33,6 +33,9 @@ public abstract class Element extends Context {
         return getParent().getWebDriverType();
     }
 
+    /**
+     * @return parent context of this element
+     */
     public Context getParent() {
         return parent;
     }
@@ -45,6 +48,11 @@ public abstract class Element extends Context {
         return seleniumElement;
     }
 
+    /**
+     * Get selenium {@link org.openqa.selenium.WebElement} for further operations.
+     *
+     * @return selenium {@link org.openqa.selenium.WebElement} instance
+     */
     public WebElement seleniumElement() {
         if (seleniumElement == null) {
             refresh();
@@ -52,18 +60,39 @@ public abstract class Element extends Context {
         return seleniumElement;
     }
 
+    /**
+     * Get a ElementWaitFor instance with this element's wait interval and timeout.
+     *
+     * @return ElementWaitFor instance
+     */
     public ElementWaitFor waitFor() {
         return waitFor(getWaitInterval(), getWaitTimeout());
     }
 
+    /**
+     * Get a ElementWaitFor instance with this element's wait interval.
+     *
+     * @param timeout the wait timeout in milliseconds
+     * @return ElementWaitFor instance
+     */
     public ElementWaitFor waitFor(long timeout) {
         return waitFor(getWaitInterval(), timeout);
     }
 
+    /**
+     * Get a ElementWaitFor instance.
+     *
+     * @param interval the wait interval in milliseconds
+     * @param timeout  the wait timeout in milliseconds
+     * @return ElementWaitFor instance
+     */
     public ElementWaitFor waitFor(long interval, long timeout) {
         return new ElementWaitFor(this, interval, timeout);
     }
 
+    /**
+     * Removes keyboard focus from this element.
+     */
     public void blur() {
         try {
             try {
@@ -77,6 +106,21 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Click this element. If this causes a new page to load, you
+     * should discard all references to this element and any further
+     * operations performed on this element will throw a
+     * StaleElementReferenceException.
+     * <p/>
+     * Note that if click() is done by sending a native event (which is
+     * the default on most browsers/platforms) then the method will
+     * _not_ wait for the next page to load and the caller should verify
+     * that themselves.
+     * <p/>
+     * There are some preconditions for an element to be clicked. The
+     * element must be visible and it must have a height and width
+     * greater then 0.
+     */
     public void click() {
         try {
             try {
@@ -90,6 +134,9 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Performs a double-click at middle of this element.
+     */
     public void doubleClick() {
         try {
             try {
@@ -103,6 +150,10 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Performs a context-click at middle of this element. First performs a mouseMove
+     * to the location of the element.
+     */
     public void contextClick() {
         try {
             try {
@@ -116,6 +167,11 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * If this current element is a form, or an element within a form, then this will be submitted to
+     * the remote server. If this causes the current page to change, then this method will block until
+     * the new page is loaded.
+     */
     public void submit() {
         try {
             try {
@@ -129,6 +185,11 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Use this method to simulate typing into an element, which may set its value.
+     *
+     * @param keysToSend character sequence to send to the element
+     */
     public void sendKeys(CharSequence... keysToSend) {
         try {
             try {
@@ -142,6 +203,16 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * If this element is a text entry element, this will clear the value. Has no effect on other
+     * elements. Text entry elements are INPUT and TEXTAREA elements.
+     * <p/>
+     * Note that the events fired by this event may not be as you'd expect.  In particular, we don't
+     * fire any keyboard or mouse events.  If you want to ensure keyboard events are fired, consider
+     * using something like {@link #sendKeys(CharSequence...)} with the backspace key.  To ensure
+     * you get a change event, consider following with a call to {@link #sendKeys(CharSequence...)}
+     * with the tab key.
+     */
     public void clear() {
         try {
             try {
@@ -155,6 +226,12 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Get the tag name of this element. <b>Not</b> the value of the name attribute: will return
+     * <code>"input"</code> for the element <code>&lt;input name="foo" /&gt;</code>.
+     *
+     * @return The tag name of this element.
+     */
     public String getTagName() {
         try {
             try {
@@ -168,6 +245,31 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Get the value of a the given attribute of this element. Will return the current value, even if
+     * this has been modified after the page has been loaded. More exactly, this method will return
+     * the value of the given attribute, unless that attribute is not present, in which case the value
+     * of the property with the same name is returned (for example for the "value" property of a
+     * textarea element). If neither value is set, null is returned. The "style" attribute is
+     * converted as best can be to a text representation with a trailing semi-colon. The following are
+     * deemed to be "boolean" attributes, and will return either "true" or null:
+     * <p/>
+     * async, autofocus, autoplay, checked, compact, complete, controls, declare, defaultchecked,
+     * defaultselected, defer, disabled, draggable, ended, formnovalidate, hidden, indeterminate,
+     * iscontenteditable, ismap, itemscope, loop, multiple, muted, nohref, noresize, noshade,
+     * novalidate, nowrap, open, paused, pubdate, readonly, required, reversed, scoped, seamless,
+     * seeking, selected, spellcheck, truespeed, willvalidate
+     * <p/>
+     * Finally, the following commonly mis-capitalized attribute/property names are evaluated as
+     * expected:
+     * <ul>
+     * <li>"class"
+     * <li>"readonly"
+     * </ul>
+     *
+     * @param name The name of the attribute.
+     * @return The attribute/property's current value or null if the value is not set.
+     */
     public String getAttribute(String name) {
         try {
             try {
@@ -181,6 +283,13 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Gets the value of this element.
+     * Can be used to get the text of a text entry element.
+     * Text entry elements are INPUT and TEXTAREA elements.
+     *
+     * @return the value of this element
+     */
     public String getValue() {
         try {
             try {
@@ -194,6 +303,12 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Get the visible (i.e. not hidden by CSS) innerText of this element, including sub-elements,
+     * without any leading or trailing whitespace.
+     *
+     * @return The innerText of this element.
+     */
     public String getText() {
         try {
             try {
@@ -207,6 +322,13 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Get content of the text node in this element.
+     * f the text_node_index refers to a non-text node or be out of bounds, an exception will be thrown.
+     *
+     * @param textNodeIndex index of text node in this element
+     * @return the content of the text node in this element.
+     */
     public String getTextNodeContent(int textNodeIndex) {
         String content;
 
@@ -227,6 +349,12 @@ public abstract class Element extends Context {
         return content;
     }
 
+    /**
+     * Set the selection range for text in this element.
+     *
+     * @param startIndex start position
+     * @param endIndex   end position
+     */
     public void setSelectionRange(int startIndex, int endIndex) {
         String script = "function getTextNodesIn(node) {\n" +
                 "                var textNodes = [];\n" +
@@ -304,6 +432,9 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * @return the inner html of this element.
+     */
     public String getInnerHTML() {
         try {
             try {
@@ -317,6 +448,9 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Do mouse over this element.
+     */
     public void mouseOver() {
         checkSupport(WebDriverType.BROWSER);
 
@@ -341,6 +475,9 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Do mouse out this element.
+     */
     public void mouseOut() {
         checkSupport(WebDriverType.BROWSER);
 
@@ -365,6 +502,11 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Where on the page is the top left-hand corner of the rendered element?
+     *
+     * @return A point, containing the location of the top left-hand corner of the element
+     */
     public Point getLocation() {
         try {
             try {
@@ -378,6 +520,11 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * What is the width and height of the rendered element?
+     *
+     * @return The size of the element on the page.
+     */
     public Dimension getSize() {
         try {
             try {
@@ -391,6 +538,9 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * @return The location and size of the rendered element
+     */
     public Rectangle getRect() {
         try {
             try {
@@ -412,6 +562,9 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * @return the {@link Coordinates} of this element
+     */
     public Coordinates getCoordinates() {
         try {
             try {
@@ -425,11 +578,30 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * @return the location for the center of this element
+     */
     public Point getCenter() {
         Rectangle rect = getRect();
         return new Point(rect.getX() + rect.getWidth() / 2, rect.getY() + rect.getHeight() / 2);
     }
 
+    /**
+     * Get the value of a given CSS property.
+     * Color values should be returned as rgba strings, so,
+     * for example if the "background-color" property is set as "green" in the
+     * HTML source, the returned value will be "rgba(0, 255, 0, 1)".
+     * <p/>
+     * Note that shorthand CSS properties (e.g. background, font, border, border-top, margin,
+     * margin-top, padding, padding-top, list-style, outline, pause, cue) are not returned,
+     * in accordance with the
+     * <a href="http://www.w3.org/TR/DOM-Level-2-Style/css.html#CSS-CSSStyleDeclaration">DOM CSS2 specification</a>
+     * - you should directly access the longhand properties (e.g. background-color) to access the
+     * desired values.
+     *
+     * @param propertyName the css property name of the element
+     * @return The current, computed value of the property.
+     */
     public String getCssValue(String propertyName) {
         try {
             try {
@@ -443,6 +615,12 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Determine whether or not this element is selected or not. This operation only applies to input
+     * elements such as checkboxes, options in a select and radio buttons.
+     *
+     * @return True if the element is currently selected or checked, false otherwise.
+     */
     public boolean isSelected() {
         try {
             try {
@@ -456,6 +634,12 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Is the element currently enabled or not? This will generally return true for everything but
+     * disabled input elements.
+     *
+     * @return True if the element is enabled, false otherwise.
+     */
     public boolean isEnabled() {
         try {
             try {
@@ -469,6 +653,12 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Drag and drop to target offset.
+     *
+     * @param xOffset X offset to drop
+     * @param yOffset Y offset to drop
+     */
     public void dragAndDropByOffset(int xOffset, int yOffset) {
         try {
             try {
@@ -490,6 +680,11 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Drag and drop to target element.
+     *
+     * @param targetElement the target element to drop
+     */
     public void dragAndDropTo(Element targetElement) {
         try {
             try {
@@ -512,6 +707,14 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Drag and drop to target element with offset.
+     * The origin is at the top-left corner of web driver and offsets are relative to the top-left corner of the target element.
+     *
+     * @param targetElement the target element to drop
+     * @param xOffset       X offset to drop
+     * @param yOffset       Y offset to drop
+     */
     public void dragAndDropToWithOffset(Element targetElement, int xOffset, int yOffset) {
         try {
             try {
@@ -534,6 +737,10 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Tap the center of this element.
+     * <p><b>Supported by MOBILE</b></p>
+     */
     public void tap() {
         checkSupport(WebDriverType.MOBILE);
 
@@ -549,6 +756,10 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Double tap the center of this element.
+     * <p><b>Supported by MOBILE</b></p>
+     */
     public void doubleTap() {
         checkSupport(WebDriverType.MOBILE);
 
@@ -572,6 +783,10 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Press and hold the at the center of this element until the contextmenu event has fired.
+     * <p><b>Supported by MOBILE</b></p>
+     */
     public void longPress() {
         checkSupport(WebDriverType.MOBILE);
 
@@ -587,6 +802,12 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Press and hold the at the center of this element.
+     * <p><b>Supported by MOBILE</b></p>
+     * 
+     * @param duration of the long-press, in milliseconds
+     */
     public void longPress(int duration) {
         checkSupport(WebDriverType.MOBILE);
 
@@ -602,6 +823,12 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Scrolls to direction in this element.
+     * <p><b>Supported by MOBILE</b></p>
+     * 
+     * @param direction the direction to scroll
+     */
     public void scroll(ScrollDirection direction) {
         checkSupport(WebDriverType.MOBILE);
 
@@ -623,6 +850,12 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Scrolls from this element to another.
+     * <p><b>Supported by MOBILE</b></p>
+     * 
+     * @param targetElement the target element to be scrolled to
+     */
     public void scrollTo(Element targetElement) {
         checkSupport(WebDriverType.MOBILE);
 
@@ -639,6 +872,9 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Scrolls this element into view.
+     */
     public void scrollIntoView() {
         try {
             try {
@@ -664,6 +900,15 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Convenience method for pinching this element.
+     * "pinching" refers to the action of two appendages pressing the screen and sliding towards each other.
+     * NOTE:
+     * This convenience method places the initial touches around the element, if this would happen to place one of them
+     * off the screen, appium with return an outOfBounds error. In this case, revert to using the MultiTouchAction api
+     * instead of this method.
+     * <p><b>Supported by MOBILE</b></p>
+     */
     public void pinch() {
         checkSupport(WebDriverType.MOBILE);
 
@@ -679,6 +924,15 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Convenience method for "zooming in" on this element.
+     * "zooming in" refers to the action of two appendages pressing the screen and sliding away from each other.
+     * NOTE:
+     * This convenience method slides touches away from the element, if this would happen to place one of them
+     * off the screen, appium will return an outOfBounds error. In this case, revert to using the MultiTouchAction api
+     * instead of this method.
+     * <p><b>Supported by MOBILE</b></p>
+     */
     public void zoom() {
         checkSupport(WebDriverType.MOBILE);
 
@@ -694,6 +948,12 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Set the value on this element in the application
+     * <p><b>Supported by IOS</b></p>
+     * 
+     * @param value the value to set
+     */
     public void setValue(String value) {
         checkSupport(WebDriverType.IOS);
 
@@ -709,6 +969,12 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * Replace the value on this element in the application
+     * <p><b>Supported by ANDROID</b></p>
+     *
+     * @param value the value to replace
+     */
     public void replaceValue(String value) {
         checkSupport(WebDriverType.ANDROID);
 
@@ -724,6 +990,9 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * @return whether this element is displayed or not.
+     */
     public boolean isDisplayed() {
         try {
             try {
@@ -739,6 +1008,9 @@ public abstract class Element extends Context {
         }
     }
 
+    /**
+     * @return whether this element is existing or not.
+     */
     public boolean exists() {
         try {
             try {
