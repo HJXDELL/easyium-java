@@ -23,7 +23,17 @@ Advantages
 
 Maven Information
 -----------------
-TODO
+If you're using Maven, you will find easyium artifact in the central Maven repository here: http://repo1.maven.org/maven2/com/iselsoft/easyium/
+
+In order to start using easyium in your Maven project, just add the following dependency to your ``pom.xml``.
+
+.. code:: xml
+
+  <dependency>
+    <groupId>com.iselsoft</groupId>
+    <artifactId>easyium</artifactId>
+    <version>1.0.0</version>
+  </dependency>
 
 Glossary
 --------
