@@ -8,7 +8,7 @@ import com.iselsoft.easyium.Element;
 public class Control extends Model {
     protected final Element element;
 
-    protected Control(Element element) throws ReflectiveOperationException {
+    protected Control(Element element) {
         super(element);
         this.element = element;
     }

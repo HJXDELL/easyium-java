@@ -16,42 +16,46 @@ public abstract class Model {
     private final Context context;
     protected final WebDriver webDriver;
 
-    protected Model(Context context) throws ReflectiveOperationException {
+    protected Model(Context context) {
         this.context = context;
         this.webDriver = context.getWebDriver();
         initElements(this.getClass());
     }
 
-    private void initElements(Class<?> thisClass) throws ReflectiveOperationException {
-        for (Field field : thisClass.getDeclaredFields()) {
-            FoundBy annotation = field.getAnnotation(FoundBy.class);
-            field.setAccessible(true);
-            if (annotation == null) {
-                continue;
+    private void initElements(Class<?> thisClass) {
+        try {
+            for (Field field : thisClass.getDeclaredFields()) {
+                FoundBy annotation = field.getAnnotation(FoundBy.class);
+                field.setAccessible(true);
+                if (annotation == null) {
+                    continue;
+                }
+                if (field.get(this) != null) {
+                    throw new AnnotationException("Cannot add @FoundBy for field with value.");
+                }
+                if (Modifier.isStatic(field.getModifiers())) {
+                    throw new AnnotationException("Cannot add @FoundBy for static field.");
+                }
+                Class<?> type = field.getType();
+                if (Control.class.isAssignableFrom(type)) {
+                    Constructor<?> constructor = type.getDeclaredConstructor(Element.class);
+                    constructor.setAccessible(true);
+                    field.set(this, constructor.newInstance(new StaticElement(context, annotation.locator())));
+                    continue;
+                }
+                if (type.equals(Element.class) || type.equals(StaticElement.class)) {
+                    field.set(this, new StaticElement(context, annotation.locator()));
+                    continue;
+                }
+                throw new AnnotationException("Cannot add @FoundBy for field whose type is not " +
+                        "Element or StaticElement or subclass of Control.");
             }
-            if (field.get(this) != null) {
-                throw new AnnotationException("Cannot add @FoundBy for field with value.");
+            Class<?> superclass = thisClass.getSuperclass();
+            if (!superclass.equals(Control.class) && !superclass.equals(Page.class)) {
+                initElements(superclass);
             }
-            if (Modifier.isStatic(field.getModifiers())) {
-                throw new AnnotationException("Cannot add @FoundBy for static field.");
-            }
-            Class<?> type = field.getType();
-            if (Control.class.isAssignableFrom(type)) {
-                Constructor<?> constructor = type.getDeclaredConstructor(Element.class);
-                constructor.setAccessible(true);
-                field.set(this, constructor.newInstance(new StaticElement(context, annotation.locator())));
-                continue;
-            }
-            if (type.equals(Element.class) || type.equals(StaticElement.class)) {
-                field.set(this, new StaticElement(context, annotation.locator()));
-                continue;
-            }
-            throw new AnnotationException("Cannot add @FoundBy for field whose type is not " +
-                    "Element or StaticElement or subclass of Control.");
-        }
-        Class<?> superclass = thisClass.getSuperclass();
-        if (!superclass.equals(Control.class) && !superclass.equals(Page.class)) {
-            initElements(superclass);
+        } catch (ReflectiveOperationException e) {
+            throw new AnnotationException(e);
         }
     }
 }
