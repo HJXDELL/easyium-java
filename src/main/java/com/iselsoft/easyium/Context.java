@@ -117,7 +117,7 @@ public abstract class Context {
     /**
      * Capture the screenshot and store it in the specified location.
      * <p/>
-     * <p>For WebDriver extending TakesScreenshot, this makes a best effort
+     * <p>For WebDriver, this makes a best effort
      * depending on the browser to return the following in order of preference:
      * <ul>
      * <li>Entire page</li>
@@ -126,10 +126,10 @@ public abstract class Context {
      * <li>The screenshot of the entire display containing the browser</li>
      * </ul>
      * <p/>
-     * <p>For WebElement extending TakesScreenshot, this makes a best effort
+     * <p>For Element, this makes a best effort
      * depending on the browser to return the following in order of preference:
      * - The entire content of the HTML element
-     * - The visisble portion of the HTML element
+     * - The visible portion of the HTML element
      *
      * @param <X>    Return type for getScreenshotAs.
      * @param target target type, @see OutputType

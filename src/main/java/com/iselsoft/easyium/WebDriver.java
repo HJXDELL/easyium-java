@@ -446,7 +446,6 @@ public abstract class WebDriver extends Context {
      * If the script has a return value (i.e. if the script contains a <code>return</code> statement),
      * then the following steps will be taken:
      * <ul>
-     * <li>For an HTML element, this method returns a WebElement</li>
      * <li>For a decimal, a Double is returned</li>
      * <li>For a non-decimal number, a Long is returned</li>
      * <li>For a boolean, a Boolean is returned</li>
@@ -456,7 +455,7 @@ public abstract class WebDriver extends Context {
      * <li>Unless the value is null or there is no return value, in which null is returned</li>
      * </ul>
      * <p/>
-     * Arguments must be a number, a boolean, a String, WebElement, or a List of any combination of
+     * Arguments must be a number, a boolean, a String, a Element, or a List of any combination of
      * the above. An exception will be thrown if the arguments do not meet these criteria. The
      * arguments will be made available to the JavaScript via the "arguments" magic variable, as if
      * the function were called via "Function.apply"
@@ -489,7 +488,6 @@ public abstract class WebDriver extends Context {
      * The first argument passed to the callback function will be used as the script's result. This
      * value will be handled as follows:
      * <ul>
-     * <li>For an HTML element, this method returns a WebElement</li>
      * <li>For a number, a Long is returned</li>
      * <li>For a boolean, a Boolean is returned</li>
      * <li>For all other cases, a String is returned.</li>
@@ -511,13 +509,13 @@ public abstract class WebDriver extends Context {
      *       "Elapsed time: " + System.currentTimeMillis() - start);
      * }</pre>
      * Example #2: Synchronizing a test with an AJAX application: <pre>{@code
-     *   WebElement composeButton = driver.findElement(By.id("compose-button"));
+     *   Element composeButton = driver.findElement("id=compose-button");
      *   composeButton.click();
      *   ((JavascriptExecutor) driver).executeAsyncScript(
      *       "var callback = arguments[arguments.length - 1];" +
      *       "mailClient.getComposeWindowWidget().onload(callback);");
      *   driver.switchTo().frame("composeWidget");
-     *   driver.findElement(By.id("to")).sendKeys("bog@example.com");
+     *   driver.findElement("id=to").sendKeys("bog@example.com");
      * }</pre>
      * Example #3: Injecting a XMLHttpRequest and waiting for the result: <pre>{@code
      *   Object response = ((JavascriptExecutor) driver).executeAsyncScript(
@@ -533,14 +531,14 @@ public abstract class WebDriver extends Context {
      *   JsonObject json = new JsonParser().parse((String) response);
      *   assertEquals("cheese", json.get("food").getAsString());
      * }</pre>
-     * Script arguments must be a number, a boolean, a String, WebElement, or a List of any
+     * Script arguments must be a number, a boolean, a String, a Element, or a List of any
      * combination of the above. An exception will be thrown if the arguments do not meet these
      * criteria. The arguments will be made available to the JavaScript via the "arguments"
      * variable.
      *
      * @param script The JavaScript to execute.
      * @param args   The arguments to the script. May be empty.
-     * @return One of Boolean, Long, String, List, WebElement, or null.
+     * @return One of Boolean, Long, String, List, or null.
      * @see Timeouts#setScriptTimeout(long, java.util.concurrent.TimeUnit)
      */
     public Object executeAsyncScript(String script, Object... args) {
