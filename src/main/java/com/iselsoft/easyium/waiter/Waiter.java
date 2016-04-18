@@ -40,13 +40,16 @@ public class Waiter {
      * Wait for the {@link com.iselsoft.easyium.waiter.Condition} to be true.
      * 
      * @param condition the condition to be waited for
-     * @throws Exception
      */
-    public void waitFor(Condition condition) throws Exception {
+    public void waitFor(Condition condition) {
         long startTime = System.currentTimeMillis();
 
-        if (condition.occurred()) {
-            return;
+        try {
+            if (condition.occurred()) {
+                return;
+            }
+        } catch (Exception e) {
+            throw new RuntimeException(e);
         }
 
         while ((System.currentTimeMillis() - startTime) <= timeout) {
@@ -56,8 +59,12 @@ public class Waiter {
                 Thread.currentThread().interrupt();
                 e.printStackTrace();
             }
-            if (condition.occurred()) {
-                return;
+            try {
+                if (condition.occurred()) {
+                    return;
+                }
+            } catch (Exception e) {
+                throw new RuntimeException(e);
             }
         }
 

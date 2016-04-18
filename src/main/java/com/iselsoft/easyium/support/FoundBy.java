@@ -22,7 +22,7 @@ import java.lang.annotation.Target;
  *     {@literal @}FoundBy(locator = "id=mybutton")
  *     private Element myButton;
  *
- *     public MyPage(WebDriver webDriver) throws ReflectiveOperationException {
+ *     public MyPage(WebDriver webDriver) {
  *         super(webDriver);
  *     }
  * }

@@ -134,7 +134,7 @@ public abstract class Context {
      * @param <X>    Return type for getScreenshotAs.
      * @param target target type, @see OutputType
      * @return Object in which is stored information about the screenshot.
-     * @throws WebDriverException on failure.
+     * @throws EasyiumException on failure.
      * @see OutputType
      */
     public <X> X getScreenshotAs(OutputType<X> target) {

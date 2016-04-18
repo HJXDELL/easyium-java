@@ -57,7 +57,7 @@ public abstract class WebDriver extends Context {
 
     /**
      * Get selenium {@link org.openqa.selenium.WebDriver} for further operations.
-     * 
+     *
      * @return selenium {@link org.openqa.selenium.WebDriver} instance
      */
     public org.openqa.selenium.WebDriver seleniumWebDriver() {
@@ -1064,8 +1064,7 @@ public abstract class WebDriver extends Context {
      * @param appWaitActivity Automation will begin after this activity starts. [Optional]
      * @param stopApp         If true, target app will be stopped. [Optional]
      */
-    public void startActivity(String appPackage, String appActivity, String appWaitPackage, String appWaitActivity,
-                              boolean stopApp) throws IllegalArgumentException {
+    public void startActivity(String appPackage, String appActivity, String appWaitPackage, String appWaitActivity, boolean stopApp) {
         checkSupport(WebDriverType.ANDROID);
 
         ((StartsActivity) seleniumWebDriver()).startActivity(appPackage, appActivity, appWaitPackage, appWaitActivity, stopApp);
@@ -1081,8 +1080,7 @@ public abstract class WebDriver extends Context {
      * @param appWaitPackage  Automation will begin after this package starts. [Optional]
      * @param appWaitActivity Automation will begin after this activity starts. [Optional]
      */
-    public void startActivity(String appPackage, String appActivity, String appWaitPackage, String appWaitActivity)
-            throws IllegalArgumentException {
+    public void startActivity(String appPackage, String appActivity, String appWaitPackage, String appWaitActivity) {
         checkSupport(WebDriverType.ANDROID);
 
         ((StartsActivity) seleniumWebDriver()).startActivity(appPackage, appActivity, appWaitPackage, appWaitActivity);
@@ -1096,7 +1094,7 @@ public abstract class WebDriver extends Context {
      * @param appPackage  The package containing the activity. [Required]
      * @param appActivity The activity to start. [Required]
      */
-    public void startActivity(String appPackage, String appActivity) throws IllegalArgumentException {
+    public void startActivity(String appPackage, String appActivity) {
         checkSupport(WebDriverType.ANDROID);
 
         ((StartsActivity) seleniumWebDriver()).startActivity(appPackage, appActivity);

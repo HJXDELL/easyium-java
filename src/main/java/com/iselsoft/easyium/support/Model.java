@@ -38,7 +38,12 @@ public abstract class Model {
                 }
                 Class<?> type = field.getType();
                 if (Control.class.isAssignableFrom(type)) {
-                    Constructor<?> constructor = type.getDeclaredConstructor(Element.class);
+                    Constructor<?> constructor;
+                    try {
+                        constructor = type.getDeclaredConstructor(Element.class);
+                    } catch (NoSuchMethodException e) {
+                        throw new AnnotationException(String.format("No such constructor %s(com.iselsoft.easyium.Element element).", thisClass.getName()));
+                    }
                     constructor.setAccessible(true);
                     field.set(this, constructor.newInstance(new StaticElement(context, annotation.locator())));
                     continue;
@@ -55,7 +60,7 @@ public abstract class Model {
                 initElements(superclass);
             }
         } catch (ReflectiveOperationException e) {
-            throw new AnnotationException(e);
+            throw new RuntimeException(e);
         }
     }
 }
