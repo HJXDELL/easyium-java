@@ -12,4 +12,8 @@ public class Control extends Model {
         super(element);
         this.element = element;
     }
+    
+    public Element element() {
+        return element;
+    }
 }

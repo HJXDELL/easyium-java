@@ -63,4 +63,8 @@ public abstract class Model {
             throw new RuntimeException(e);
         }
     }
+    
+    public WebDriver webDriver() {
+        return webDriver;
+    }
 }
