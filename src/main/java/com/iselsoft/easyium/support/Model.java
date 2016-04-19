@@ -42,7 +42,7 @@ public abstract class Model {
                     try {
                         constructor = type.getDeclaredConstructor(Element.class);
                     } catch (NoSuchMethodException e) {
-                        throw new AnnotationException(String.format("No such constructor %s(com.iselsoft.easyium.Element element).", thisClass.getName()));
+                        throw new AnnotationException(String.format("No such constructor %s(com.iselsoft.easyium.Element).", thisClass.getName()));
                     }
                     constructor.setAccessible(true);
                     field.set(this, constructor.newInstance(new StaticElement(context, annotation.locator())));
