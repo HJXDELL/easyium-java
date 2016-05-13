@@ -6,7 +6,7 @@ package com.iselsoft.easyium.waiter;
 public interface Condition {
     /**
      * @return true if the condition occurred. False otherwise
-     * @throws Exception
+     * @throws Exception if exception occurs
      */
     boolean occurred() throws Exception;
 

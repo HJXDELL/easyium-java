@@ -58,7 +58,7 @@ public class WebDriverWaitFor {
 
     /**
      * Wait for the text present.
-     * 
+     *
      * @param text the text to wait
      */
     public void textPresent(String text) {
@@ -67,7 +67,7 @@ public class WebDriverWaitFor {
 
     /**
      * Wait for the url equals expected url.
-     * 
+     *
      * @param url the expected url
      */
     public void urlEquals(String url) {
@@ -77,7 +77,7 @@ public class WebDriverWaitFor {
     /**
      * Wait for the activity present.
      * <p><b>Supported by ANDROID</b></p>
-     * 
+     *
      * @param activity the activity to wait
      */
     public void activityPresent(String activity) {

@@ -10,7 +10,7 @@ package com.iselsoft.easyium;
  *          return String.format("xpath=.//*[@bar='%s']", element.getAttribute("bar"));
  *      }
  * });
- * <pre/>
+ * </pre>
  */
 public interface Identifier {
     Identifier id = new Identifier() {

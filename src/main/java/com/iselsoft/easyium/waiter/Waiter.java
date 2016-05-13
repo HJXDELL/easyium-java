@@ -18,7 +18,7 @@ public class Waiter {
 
     /**
      * Create a waiter instance with default interval.
-     * 
+     *
      * @param timeout the timeout in milliseconds
      */
     public Waiter(long timeout) {
@@ -27,9 +27,9 @@ public class Waiter {
 
     /**
      * Create a waiter instance.
-     * 
+     *
      * @param interval the interval in milliseconds
-     * @param timeout the timeout in milliseconds
+     * @param timeout  the timeout in milliseconds
      */
     public Waiter(long interval, long timeout) {
         this.interval = interval;
@@ -38,7 +38,7 @@ public class Waiter {
 
     /**
      * Wait for the {@link com.iselsoft.easyium.waiter.Condition} to be true.
-     * 
+     *
      * @param condition the condition to be waited for
      */
     public void waitFor(Condition condition) {

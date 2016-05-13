@@ -12,7 +12,7 @@ import java.util.List;
 
 public abstract class Context {
     public static final long UNSET_WAIT_TIME = Long.MIN_VALUE;
-    
+
     private long waitInterval;
     private long waitTimeout;
 
@@ -37,7 +37,7 @@ public abstract class Context {
 
     /**
      * persist this context.
-     * 
+     *
      * @see DynamicElement#persist()
      */
     public abstract void persist();
@@ -116,8 +116,8 @@ public abstract class Context {
 
     /**
      * Capture the screenshot and store it in the specified location.
-     * <p/>
-     * <p>For WebDriver, this makes a best effort
+     * <p>
+     * For WebDriver, this makes a best effort
      * depending on the browser to return the following in order of preference:
      * <ul>
      * <li>Entire page</li>
@@ -125,8 +125,7 @@ public abstract class Context {
      * <li>Visible portion of the current frame</li>
      * <li>The screenshot of the entire display containing the browser</li>
      * </ul>
-     * <p/>
-     * <p>For Element, this makes a best effort
+     * For Element, this makes a best effort
      * depending on the browser to return the following in order of preference:
      * - The entire content of the HTML element
      * - The visible portion of the HTML element
@@ -164,7 +163,7 @@ public abstract class Context {
      * Check whether the webdriver type match requires.
      *
      * @param webDriverTypeGroup webdriver type group
-     * @param webDriverTypes webdriver types
+     * @param webDriverTypes     webdriver types
      */
     public void checkSupport(List<WebDriverType> webDriverTypeGroup, WebDriverType... webDriverTypes) {
         WebDriverType currentWebDriverType = getWebDriverType();
@@ -183,6 +182,10 @@ public abstract class Context {
 
     /**
      * Only used by {@link #refresh()}.
+     *
+     * @param locator the locator (relative to this context) of the child element. @see LocatorHelper
+     * @return found selenium element
+     * @see LocatorHelper
      */
     protected WebElement findSeleniumElement(String locator) {
         By by = LocatorHelper.toBy(locator);
@@ -204,7 +207,7 @@ public abstract class Context {
 
     /**
      * Whether this context has a child element.
-     * 
+     *
      * @param locator the locator (relative to this context) of the child element. @see LocatorHelper
      * @return whether this context has a child element.
      * @see LocatorHelper
@@ -216,7 +219,7 @@ public abstract class Context {
     /**
      * Find a DynamicElement immediately with {@link Identifier#id} as identifier.
      * Note: if no element is found, null wil be returned.
-     * 
+     *
      * @param locator the locator (relative to this context) of the element to be found. @see LocatorHelper
      * @return found DynamicElement
      * @see LocatorHelper
@@ -228,13 +231,13 @@ public abstract class Context {
 
     /**
      * Find a DynamicElement under this context with {@link Identifier#id} as identifier until the found element match the given condition.
-     * 
-     * @param locator the locator (relative to this context) of the element to be found. @see LocatorHelper
+     *
+     * @param locator   the locator (relative to this context) of the element to be found. @see LocatorHelper
      * @param condition end finding element when the found element match the condition @see FindElementCondition
      * @return found DynamicElement
      * @see LocatorHelper
      * @see FindElementCondition
-     * @see #findElement(String, Identifier, FindElementCondition) 
+     * @see #findElement(String, Identifier, FindElementCondition)
      */
     public Element findElement(String locator, FindElementCondition condition) {
         return findElement(locator, Identifier.id, condition);
@@ -244,7 +247,7 @@ public abstract class Context {
      * Find a DynamicElement under this context immediately.
      * Note: if no element is found, null wil be returned.
      *
-     * @param locator the locator (relative to this context) of the element to be found. @see LocatorHelper
+     * @param locator    the locator (relative to this context) of the element to be found. @see LocatorHelper
      * @param identifier the identifier to identify the locator of the found DynamicElement @see Identifier
      * @return found DynamicElement
      * @see LocatorHelper
@@ -272,9 +275,9 @@ public abstract class Context {
     /**
      * Find a DynamicElement under this context until the found element match the given condition.
      *
-     * @param locator the locator (relative to this context) of the element to be found. @see LocatorHelper
+     * @param locator    the locator (relative to this context) of the element to be found. @see LocatorHelper
      * @param identifier the identifier to identify the locator of the found DynamicElement @see Identifier
-     * @param condition end finding element when the found element match the condition @see FindElementCondition
+     * @param condition  end finding element when the found element match the condition @see FindElementCondition
      * @return found DynamicElement
      * @see LocatorHelper
      * @see Identifier
@@ -282,7 +285,7 @@ public abstract class Context {
      */
     public Element findElement(String locator, Identifier identifier, FindElementCondition condition) {
         long startTime = System.currentTimeMillis();
-        
+
         Element element = findElement(locator, identifier);
 
         if (condition.occurred(element)) {
@@ -322,7 +325,7 @@ public abstract class Context {
     /**
      * Find DynamicElement list with {@link Identifier#id} as identifier until the found element list match the give condition.
      *
-     * @param locator the locator (relative to this context) of the elements to be found. @see LocatorHelper
+     * @param locator   the locator (relative to this context) of the elements to be found. @see LocatorHelper
      * @param condition end finding elements when the found element list match the given condition @see FindElementsCondition
      * @return found DynamicElement List
      * @see LocatorHelper
@@ -337,7 +340,7 @@ public abstract class Context {
      * Find DynamicElement list immediately.
      * Note: if no elements is found, empty list wil be returned.
      *
-     * @param locator the locator (relative to this context) of the elements to be found. @see LocatorHelper
+     * @param locator    the locator (relative to this context) of the elements to be found. @see LocatorHelper
      * @param identifier the identifier to identify the locator of the found DynamicElements @see Identifier
      * @return found DynamicElement List
      * @see LocatorHelper
@@ -371,9 +374,9 @@ public abstract class Context {
     /**
      * Find DynamicElement list until the found element list match the give condition.
      *
-     * @param locator the locator (relative to this context) of the elements to be found. @see LocatorHelper
+     * @param locator    the locator (relative to this context) of the elements to be found. @see LocatorHelper
      * @param identifier the identifier to identify the locator of the found DynamicElements @see Identifier
-     * @param condition end finding elements when the found element list match the given condition @see FindElementsCondition
+     * @param condition  end finding elements when the found element list match the given condition @see FindElementsCondition
      * @return found DynamicElement List
      * @see LocatorHelper
      * @see Identifier
@@ -383,7 +386,7 @@ public abstract class Context {
         long startTime = System.currentTimeMillis();
 
         List<Element> elements = findElements(locator, identifier);
-        
+
         if (condition.occurred(elements)) {
             return elements;
         }

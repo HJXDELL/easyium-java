@@ -63,7 +63,7 @@ public class OperaDriver extends WebDriver {
      * Creates a new OperaDriver instance. The {@code service} will be started along with the
      * driver, and shutdown upon calling {@link #quit()}.
      *
-     * @param service The service to use.
+     * @param service      The service to use.
      * @param capabilities The capabilities required from the OperaDriver.
      */
     public OperaDriver(OperaDriverService service, Capabilities capabilities) {

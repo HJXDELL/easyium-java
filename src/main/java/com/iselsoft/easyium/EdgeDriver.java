@@ -63,7 +63,7 @@ public class EdgeDriver extends WebDriver {
      * Creates a new EdgeDriver instance. The {@code service} will be started along with the
      * driver, and shutdown upon calling {@link #quit()}.
      *
-     * @param service The service to use.
+     * @param service      The service to use.
      * @param capabilities The capabilities required from the EdgeDriver.
      */
     public EdgeDriver(EdgeDriverService service, Capabilities capabilities) {

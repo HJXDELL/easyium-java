@@ -5,7 +5,7 @@ import io.appium.java_client.MobileBy;
 import org.openqa.selenium.By;
 
 /**
- * This helper is used to convert locator to {@link org.openqa.selenium.By}. 
+ * This helper is used to convert locator to {@link org.openqa.selenium.By}.
  * <p>
  * The format of locator is: "by=value", the possible values of "by" are:
  * <pre>

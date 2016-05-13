@@ -8,11 +8,11 @@ import java.util.List;
  * <pre>
  * context.findElements("class=foo", new FindElementCondition() {
  *      {@literal @}Override
- *      public boolean occurred(List<Element> elements) {
- *          return elements.size() >= 2
+ *      public boolean occurred(List{@literal <}Element{@literal >} elements) {
+ *          return elements.size() {@literal >}= 2
  *      }
  * });
- * <pre/>
+ * </pre>
  */
 public interface FindElementsCondition {
     FindElementsCondition isNotEmpty = new FindElementsCondition() {

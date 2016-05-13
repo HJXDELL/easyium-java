@@ -1,7 +1,8 @@
 package com.iselsoft.easyium;
 
 import com.google.gson.JsonObject;
-import com.iselsoft.easyium.exceptions.*;
+import com.iselsoft.easyium.exceptions.ElementTimeoutException;
+import com.iselsoft.easyium.exceptions.WebDriverTimeoutException;
 import com.iselsoft.easyium.waiter.webdriver.WebDriverWaitFor;
 import io.appium.java_client.*;
 import io.appium.java_client.NoSuchContextException;
@@ -144,6 +145,8 @@ public abstract class WebDriver extends Context {
 
     /**
      * Alias for {@link #get(String)}
+     *
+     * @param url The URL to load. It is best to use a fully qualified URL
      */
     public void open(String url) {
         get(url);
@@ -320,7 +323,6 @@ public abstract class WebDriver extends Context {
          *   // do something to open a new window
          *   webDriver.switchTo().newWindow(previousWindowHandles);
          * </pre>
-         * </p>
          *
          * @param previousWindowHandles The previous window handles as returned by {@link #getWindowHandles()}
          * @return This driver focused on the new window
@@ -438,11 +440,11 @@ public abstract class WebDriver extends Context {
     /**
      * Executes JavaScript in the context of the currently selected frame or window. The script
      * fragment provided will be executed as the body of an anonymous function.
-     * <p/>
+     * <p>
      * Within the script, use <code>document</code> to refer to the current document. Note that local
      * variables will not be available once the script has finished executing, though global variables
      * will persist.
-     * <p/>
+     * <p>
      * If the script has a return value (i.e. if the script contains a <code>return</code> statement),
      * then the following steps will be taken:
      * <ul>
@@ -454,7 +456,7 @@ public abstract class WebDriver extends Context {
      * support nested lists.</li>
      * <li>Unless the value is null or there is no return value, in which null is returned</li>
      * </ul>
-     * <p/>
+     * <p>
      * Arguments must be a number, a boolean, a String, a Element, or a List of any combination of
      * the above. An exception will be thrown if the arguments do not meet these criteria. The
      * arguments will be made available to the JavaScript via the "arguments" magic variable, as if
@@ -484,7 +486,7 @@ public abstract class WebDriver extends Context {
      * scripts executed with this method must explicitly signal they are finished by invoking the
      * provided callback. This callback is always injected into the executed function as the last
      * argument.
-     * <p/>
+     * <p>
      * The first argument passed to the callback function will be used as the script's result. This
      * value will be handled as follows:
      * <ul>
@@ -495,12 +497,12 @@ public abstract class WebDriver extends Context {
      * support nested lists.</li>
      * <li>Unless the value is null or there is no return value, in which null is returned</li>
      * </ul>
-     * <p/>
+     * <p>
      * The default timeout for a script to be executed is 0ms. In most cases, including the examples
      * below, one must set the script timeout
      * {@link Timeouts#setScriptTimeout(long, java.util.concurrent.TimeUnit)}  beforehand
      * to a value sufficiently large enough.
-     * <p/>
+     * <p>
      * Example #1: Performing a sleep in the browser under test. <pre>{@code
      *   long start = System.currentTimeMillis();
      *   ((JavascriptExecutor) driver).executeAsyncScript(
@@ -708,6 +710,8 @@ public abstract class WebDriver extends Context {
     /**
      * Alias for {@link #rotate(ScreenOrientation)}
      * <p><b>Supported by MOBILE</b></p>
+     *
+     * @param orientation the desired screen orientation
      */
     public void setOrientation(ScreenOrientation orientation) {
         rotate(orientation);
@@ -739,6 +743,8 @@ public abstract class WebDriver extends Context {
     /**
      * Gets device date and time for both iOS(Supports only real device) and Android devices
      * <p><b>Supported by MOBILE</b></p>
+     *
+     * @return the device time
      */
     public String getDeviceTime() {
         checkSupport(WebDriverType.MOBILE);
@@ -1203,7 +1209,7 @@ public abstract class WebDriver extends Context {
 
     /**
      * Set the `ignoreUnimportantViews` setting. *Android-only method*
-     * <p/>
+     * <p>
      * Sets whether Android devices should use `setCompressedLayoutHeirarchy()`
      * which ignores all views which are marked IMPORTANT_FOR_ACCESSIBILITY_NO
      * or IMPORTANT_FOR_ACCESSIBILITY_AUTO (and have been deemed not important

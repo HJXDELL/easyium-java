@@ -63,7 +63,7 @@ public class ChromeDriver extends WebDriver {
      * Creates a new ChromeDriver instance. The {@code service} will be started along with the
      * driver, and shutdown upon calling {@link #quit()}.
      *
-     * @param service The service to use.
+     * @param service      The service to use.
      * @param capabilities The capabilities required from the ChromeDriver.
      */
     public ChromeDriver(ChromeDriverService service, Capabilities capabilities) {

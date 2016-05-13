@@ -40,7 +40,7 @@ public class ElementWaitFor {
 
     /**
      * Wait for not.
-     * 
+     *
      * @return this ElementWaitFor instance
      */
     public ElementWaitFor not() {
@@ -64,7 +64,7 @@ public class ElementWaitFor {
 
     /**
      * Wait for this element's text equals the expected text.
-     * 
+     *
      * @param text the expected text
      */
     public void textEquals(String text) {
@@ -76,9 +76,9 @@ public class ElementWaitFor {
 
     /**
      * Wait for this element's attribute value equals the expected value.
-     * 
+     *
      * @param attribute the attribute of this element
-     * @param value the expected value
+     * @param value     the expected value
      */
     public void attributeEquals(String attribute, String value) {
         long startTime = System.currentTimeMillis();
@@ -89,9 +89,9 @@ public class ElementWaitFor {
 
     /**
      * Wait for this element's attribute value contains one of the value list.
-     * 
+     *
      * @param attribute the attribute of this element
-     * @param values the expected values
+     * @param values    the expected values
      */
     public void attributeContainsOne(String attribute, String... values) {
         long startTime = System.currentTimeMillis();
@@ -102,9 +102,9 @@ public class ElementWaitFor {
 
     /**
      * Wait for this element's attribute value contains all of the value list.
-     * 
+     *
      * @param attribute the attribute of this element
-     * @param values the expected values
+     * @param values    the expected values
      */
     public void attributeContainsAll(String attribute, String... values) {
         long startTime = System.currentTimeMillis();

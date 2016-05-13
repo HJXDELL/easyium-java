@@ -14,9 +14,9 @@ public class SafariDriver extends WebDriver {
     /**
      * Converts the specified {@link Capabilities} to a {@link SafariOptions}
      * instance and initializes a new SafariDriver using these options.
-     * @see SafariOptions#fromCapabilities(org.openqa.selenium.Capabilities)
      *
      * @param desiredCapabilities capabilities requested of the driver
+     * @see SafariOptions#fromCapabilities(org.openqa.selenium.Capabilities)
      */
     public SafariDriver(Capabilities desiredCapabilities) {
         super(new org.openqa.selenium.safari.SafariDriver(desiredCapabilities));

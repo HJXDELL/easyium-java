@@ -10,7 +10,7 @@ package com.iselsoft.easyium;
  *          return !element.getText().isEmpty();
  *      }
  * });
- * <pre/>
+ * </pre>
  */
 public interface FindElementCondition {
     FindElementCondition isNotNull = new FindElementCondition() {
@@ -18,7 +18,7 @@ public interface FindElementCondition {
         public boolean occurred(Element element) {
             return element != null;
         }
-        
+
         @Override
         public String toString() {
             return "is not null";
@@ -36,6 +36,6 @@ public interface FindElementCondition {
             return "is null";
         }
     };
-    
+
     boolean occurred(Element element);
 }

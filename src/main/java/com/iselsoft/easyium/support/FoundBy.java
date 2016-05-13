@@ -10,9 +10,9 @@ import java.lang.annotation.Target;
 /**
  * Used to mark a field on a {@link Model} Object to indicate an alternative mechanism for locating the
  * element. This allows users to quickly and easily create {@link StaticElement}.
- * <p/>
+ * <p>
  * You can use this annotation by specifying "locator" of the {@link StaticElement} to be created.
- * <p/>
+ * <p>
  * For example, two ways to create a {@link StaticElement}:
  * <pre>
  * public class MyPage extends Page {

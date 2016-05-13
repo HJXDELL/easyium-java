@@ -111,12 +111,12 @@ public abstract class Element extends Context {
      * should discard all references to this element and any further
      * operations performed on this element will throw a
      * StaleElementReferenceException.
-     * <p/>
+     * <p>
      * Note that if click() is done by sending a native event (which is
      * the default on most browsers/platforms) then the method will
      * _not_ wait for the next page to load and the caller should verify
      * that themselves.
-     * <p/>
+     * <p>
      * There are some preconditions for an element to be clicked. The
      * element must be visible and it must have a height and width
      * greater then 0.
@@ -206,7 +206,7 @@ public abstract class Element extends Context {
     /**
      * If this element is a text entry element, this will clear the value. Has no effect on other
      * elements. Text entry elements are INPUT and TEXTAREA elements.
-     * <p/>
+     * <p>
      * Note that the events fired by this event may not be as you'd expect.  In particular, we don't
      * fire any keyboard or mouse events.  If you want to ensure keyboard events are fired, consider
      * using something like {@link #sendKeys(CharSequence...)} with the backspace key.  To ensure
@@ -253,13 +253,13 @@ public abstract class Element extends Context {
      * textarea element). If neither value is set, null is returned. The "style" attribute is
      * converted as best can be to a text representation with a trailing semi-colon. The following are
      * deemed to be "boolean" attributes, and will return either "true" or null:
-     * <p/>
+     * <p>
      * async, autofocus, autoplay, checked, compact, complete, controls, declare, defaultchecked,
      * defaultselected, defer, disabled, draggable, ended, formnovalidate, hidden, indeterminate,
      * iscontenteditable, ismap, itemscope, loop, multiple, muted, nohref, noresize, noshade,
      * novalidate, nowrap, open, paused, pubdate, readonly, required, reversed, scoped, seamless,
      * seeking, selected, spellcheck, truespeed, willvalidate
-     * <p/>
+     * <p>
      * Finally, the following commonly mis-capitalized attribute/property names are evaluated as
      * expected:
      * <ul>
@@ -591,7 +591,7 @@ public abstract class Element extends Context {
      * Color values should be returned as rgba strings, so,
      * for example if the "background-color" property is set as "green" in the
      * HTML source, the returned value will be "rgba(0, 255, 0, 1)".
-     * <p/>
+     * <p>
      * Note that shorthand CSS properties (e.g. background, font, border, border-top, margin,
      * margin-top, padding, padding-top, list-style, outline, pause, cue) are not returned,
      * in accordance with the
@@ -805,7 +805,7 @@ public abstract class Element extends Context {
     /**
      * Press and hold the at the center of this element.
      * <p><b>Supported by MOBILE</b></p>
-     * 
+     *
      * @param duration of the long-press, in milliseconds
      */
     public void longPress(int duration) {
@@ -826,7 +826,7 @@ public abstract class Element extends Context {
     /**
      * Scrolls to direction in this element.
      * <p><b>Supported by MOBILE</b></p>
-     * 
+     *
      * @param direction the direction to scroll
      */
     public void scroll(ScrollDirection direction) {
@@ -853,7 +853,7 @@ public abstract class Element extends Context {
     /**
      * Scrolls from this element to another.
      * <p><b>Supported by MOBILE</b></p>
-     * 
+     *
      * @param targetElement the target element to be scrolled to
      */
     public void scrollTo(Element targetElement) {
@@ -951,7 +951,7 @@ public abstract class Element extends Context {
     /**
      * Set the value on this element in the application
      * <p><b>Supported by IOS</b></p>
-     * 
+     *
      * @param value the value to set
      */
     public void setValue(String value) {
