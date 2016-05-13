@@ -1,7 +1,7 @@
 package com.iselsoft.easyium;
 
 /**
- * Identifier is a interface to generate the locator of the found element, you can get the standard ones in this.
+ * Identifier is an interface to generate the locator of the found element, you can get the standard ones in this.
  * Otherwise, you can create one like this:
  * <pre>
  * context.findElement("class=foo", new Identifier() {

@@ -164,7 +164,7 @@ public abstract class Context {
      * Check whether the webdriver type match requires.
      *
      * @param webDriverTypeGroup webdriver type group
-     * @param webDriverTypes     webdriver types
+     * @param webDriverTypes webdriver types
      */
     public void checkSupport(List<WebDriverType> webDriverTypeGroup, WebDriverType... webDriverTypes) {
         WebDriverType currentWebDriverType = getWebDriverType();
@@ -203,21 +203,19 @@ public abstract class Context {
     }
 
     /**
+     * Whether this context has a child element.
+     * 
      * @param locator the locator (relative to this context) of the child element. @see LocatorHelper
      * @return whether this context has a child element.
      * @see LocatorHelper
      */
     public boolean hasChild(String locator) {
-        try {
-            findElement(locator);
-            return true;
-        } catch (NoSuchElementException e) {
-            return false;
-        }
+        return findElement(locator) != null;
     }
 
     /**
-     * Find a DynamicElement with {@link Identifier#id} as identifier.
+     * Find a DynamicElement immediately with {@link Identifier#id} as identifier.
+     * Note: if no element is found, null wil be returned.
      * 
      * @param locator the locator (relative to this context) of the element to be found. @see LocatorHelper
      * @return found DynamicElement
@@ -229,7 +227,22 @@ public abstract class Context {
     }
 
     /**
+     * Find a DynamicElement under this context with {@link Identifier#id} as identifier until the found element match the given condition.
+     * 
+     * @param locator the locator (relative to this context) of the element to be found. @see LocatorHelper
+     * @param condition end finding element when the found element match the condition @see FindElementCondition
+     * @return found DynamicElement
+     * @see LocatorHelper
+     * @see FindElementCondition
+     * @see #findElement(String, Identifier, FindElementCondition) 
+     */
+    public Element findElement(String locator, FindElementCondition condition) {
+        return findElement(locator, Identifier.id, condition);
+    }
+
+    /**
      * Find a DynamicElement under this context immediately.
+     * Note: if no element is found, null wil be returned.
      *
      * @param locator the locator (relative to this context) of the element to be found. @see LocatorHelper
      * @param identifier the identifier to identify the locator of the found DynamicElement @see Identifier
@@ -250,24 +263,103 @@ public abstract class Context {
         } catch (org.openqa.selenium.InvalidSelectorException e) {
             throw new InvalidLocatorException(String.format("The value of locator <%s> is not a valid expression.", locator), this);
         } catch (org.openqa.selenium.NoSuchElementException e) {
-            throw new NoSuchElementException(String.format("Cannot find element by <%s> under:", locator), this);
+            return null;
         } catch (org.openqa.selenium.WebDriverException e) {
             throw new EasyiumException(e.getMessage(), this);
         }
     }
 
     /**
-     * Only used by {@link #findElements}.
+     * Find a DynamicElement under this context until the found element match the given condition.
+     *
+     * @param locator the locator (relative to this context) of the element to be found. @see LocatorHelper
+     * @param identifier the identifier to identify the locator of the found DynamicElement @see Identifier
+     * @param condition end finding element when the found element match the condition @see FindElementCondition
+     * @return found DynamicElement
+     * @see LocatorHelper
+     * @see Identifier
+     * @see FindElementCondition
      */
-    protected List<WebElement> findSeleniumElements(String locator) {
+    public Element findElement(String locator, Identifier identifier, FindElementCondition condition) {
+        long startTime = System.currentTimeMillis();
+        
+        Element element = findElement(locator, identifier);
+
+        if (condition.occurred(element)) {
+            return element;
+        }
+
+        while ((System.currentTimeMillis() - startTime) <= getWaitTimeout()) {
+            try {
+                Thread.sleep(getWaitInterval());
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                e.printStackTrace();
+            }
+            element = findElement(locator, identifier);
+            if (condition.occurred(element)) {
+                return element;
+            }
+        }
+
+        throw new TimeoutException(String.format("Timed out waiting for the found element by <%s> under:\n%s\nmatches condition <%s>.",
+                locator, this, condition.toString()));
+    }
+
+    /**
+     * Find DynamicElement list immediately with {@link Identifier#id} as identifier.
+     * Note: if no elements is found, empty list wil be returned.
+     *
+     * @param locator the locator (relative to this context) of the elements to be found. @see LocatorHelper
+     * @return found DynamicElement List
+     * @see LocatorHelper
+     * @see #findElements(String, Identifier)
+     */
+    public List<Element> findElements(String locator) {
+        return findElements(locator, Identifier.id);
+    }
+
+    /**
+     * Find DynamicElement list with {@link Identifier#id} as identifier until the found element list match the give condition.
+     *
+     * @param locator the locator (relative to this context) of the elements to be found. @see LocatorHelper
+     * @param condition end finding elements when the found element list match the given condition @see FindElementsCondition
+     * @return found DynamicElement List
+     * @see LocatorHelper
+     * @see FindElementsCondition
+     * @see #findElements(String, Identifier, FindElementsCondition)
+     */
+    public List<Element> findElements(String locator, FindElementsCondition condition) {
+        return findElements(locator, Identifier.id, condition);
+    }
+
+    /**
+     * Find DynamicElement list immediately.
+     * Note: if no elements is found, empty list wil be returned.
+     *
+     * @param locator the locator (relative to this context) of the elements to be found. @see LocatorHelper
+     * @param identifier the identifier to identify the locator of the found DynamicElements @see Identifier
+     * @return found DynamicElement List
+     * @see LocatorHelper
+     * @see Identifier
+     */
+    public List<Element> findElements(String locator, Identifier identifier) {
         By by = LocatorHelper.toBy(locator);
         try {
             try {
-                return seleniumContext().findElements(by);
+                List<Element> elements = new ArrayList<>();
+                for (WebElement seleniumElement : seleniumContext().findElements(by)) {
+                    elements.add(new DynamicElement(this, seleniumElement, locator, identifier));
+                }
+                return elements;
             } catch (NoSuchElementException | org.openqa.selenium.StaleElementReferenceException e) {
                 // Only Element can reach here
                 ((Element) this).waitFor().exists();
-                return seleniumContext().findElements(by);
+                List<Element> elements = new ArrayList<>();
+                for (WebElement seleniumElement : seleniumContext().findElements(by)) {
+                    elements.add(new DynamicElement(this, seleniumElement, locator, identifier));
+                }
+                return elements;
             }
         } catch (org.openqa.selenium.InvalidSelectorException e) {
             throw new InvalidLocatorException(String.format("The value of locator <%s> is not a valid expression.", locator), this);
@@ -277,64 +369,22 @@ public abstract class Context {
     }
 
     /**
-     * Find DynamicElement list with 0 as atLeast and {@link Identifier#id} as identifier.
-     *
-     * @param locator the locator (relative to this context) of the elements to be found. @see LocatorHelper
-     * @return found DynamicElement List
-     * @see LocatorHelper
-     * @see #findElements(String, Identifier, int)
-     */
-    public List<Element> findElements(String locator) {
-        return findElements(locator, Identifier.id, 0);
-    }
-
-    /**
-     * Find DynamicElement list with {@link Identifier#id} as identifier.
-     *
-     * @param locator the locator (relative to this context) of the elements to be found. @see LocatorHelper
-     * @param atLeast end finding elements when the number of found elements is at least the given number.
-     * @return found DynamicElement List
-     * @see LocatorHelper
-     * @see #findElements(String, Identifier, int)
-     */
-    public List<Element> findElements(String locator, int atLeast) {
-        return findElements(locator, Identifier.id, atLeast);
-    }
-
-    /**
-     * Find DynamicElement list with 0 as atLeast.
+     * Find DynamicElement list until the found element list match the give condition.
      *
      * @param locator the locator (relative to this context) of the elements to be found. @see LocatorHelper
      * @param identifier the identifier to identify the locator of the found DynamicElements @see Identifier
+     * @param condition end finding elements when the found element list match the given condition @see FindElementsCondition
      * @return found DynamicElement List
      * @see LocatorHelper
      * @see Identifier
-     * @see #findElements(String, Identifier, int)
+     * @see FindElementsCondition
      */
-    public List<Element> findElements(String locator, Identifier identifier) {
-        return findElements(locator, identifier, 0);
-    }
-
-    /**
-     * Find DynamicElement list under this context immediately.
-     *
-     * @param locator the locator (relative to this context) of the elements to be found. @see LocatorHelper
-     * @param identifier the identifier to identify the locator of the found DynamicElements @see Identifier
-     * @param atLeast end finding elements when the number of found elements is at least the given number.
-     * @return found DynamicElement List
-     * @see LocatorHelper
-     * @see Identifier
-     */
-    public List<Element> findElements(String locator, Identifier identifier, int atLeast) {
-        List<Element> elements = new ArrayList<>();
-
+    public List<Element> findElements(String locator, Identifier identifier, FindElementsCondition condition) {
         long startTime = System.currentTimeMillis();
 
-        List<WebElement> seleniumElements = findSeleniumElements(locator);
-        if (seleniumElements.size() >= atLeast) {
-            for (WebElement seleniumElement : seleniumElements) {
-                elements.add(new DynamicElement(this, seleniumElement, locator, identifier));
-            }
+        List<Element> elements = findElements(locator, identifier);
+        
+        if (condition.occurred(elements)) {
             return elements;
         }
 
@@ -345,16 +395,13 @@ public abstract class Context {
                 Thread.currentThread().interrupt();
                 e.printStackTrace();
             }
-            seleniumElements = findSeleniumElements(locator);
-            if (seleniumElements.size() >= atLeast) {
-                for (WebElement seleniumElement : seleniumElements) {
-                    elements.add(new DynamicElement(this, seleniumElement, locator, identifier));
-                }
+            elements = findElements(locator, identifier);
+            if (condition.occurred(elements)) {
                 return elements;
             }
         }
 
-        throw new TimeoutException(String.format("Timed out waiting for the number of found elements by <%s> under:\n%s\nto be at least <%s>.",
-                locator, this, atLeast));
+        throw new TimeoutException(String.format("Timed out waiting for the found element list by <%s> under:\n%s\nmatches condition <%s>.",
+                locator, this, condition.toString()));
     }
 }
