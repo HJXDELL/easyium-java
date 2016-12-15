@@ -271,22 +271,18 @@ public abstract class WebDriver extends Context {
          * @throws NoSuchFrameException If the frame cannot be found
          */
         public WebDriver frame(int index) {
-            targetLocator.frame(index);
-            return WebDriver.this;
+            return frame(String.format("xpath=(.//iframe)[%s]", index + 1));
         }
 
         /**
-         * Select a frame by its name or ID. Frames located by matching name attributes are always given
-         * precedence over those matched by ID.
+         * Select a frame by its locator.
          *
-         * @param nameOrId the name of the frame window, the id of the &lt;frame&gt; or &lt;iframe&gt;
-         *                 element, or the (zero-based) index
+         * @param locator the locator of the frame window
          * @return This driver focused on the given frame
          * @throws NoSuchFrameException If the frame cannot be found
          */
-        public WebDriver frame(String nameOrId) {
-            targetLocator.frame(nameOrId);
-            return WebDriver.this;
+        public WebDriver frame(String locator) {
+            return frame(new StaticElement(WebDriver.this, locator));
         }
 
         /**
