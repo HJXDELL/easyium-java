@@ -1,5 +1,7 @@
 package com.iselsoft.easyium.waiter.webdriver;
 
+import com.iselsoft.easyium.DynamicElement;
+import com.iselsoft.easyium.Element;
 import com.iselsoft.easyium.WebDriver;
 import com.iselsoft.easyium.WebDriverType;
 import com.iselsoft.easyium.exceptions.WebDriverTimeoutException;
@@ -71,7 +73,25 @@ public class WebDriverWaitFor {
      * @param url the expected url
      */
     public void urlEquals(String url) {
-        waitFor(new WebDriverURLEqualsConditioin(webDriver, url), interval, timeout);
+        waitFor(new WebDriverURLEqualsCondition(webDriver, url), interval, timeout);
+    }
+
+    /**
+     * Wait for the page to be refreshed / redirected.
+     * <p>
+     * Example: Wait for the page to be refreshed.
+     * <pre>
+     *   // usually we use body as indicator, the indicator should be a DynamicElement
+     *   Element indicator = driver.findElement("tag=body");
+     *   // reload after 2 seconds
+     *   new StaticElement(driver, "id=reload_after_2_seconds").click();
+     *   driver.waitFor().reloaded(indicator);
+     * </pre>
+     * 
+     * @param indicator the indicator element, it should be a {@link DynamicElement}
+     */
+    public void reloaded(Element indicator) {
+        waitFor(new WebDriverReloadedCondition(webDriver, indicator), interval, timeout);
     }
 
     /**

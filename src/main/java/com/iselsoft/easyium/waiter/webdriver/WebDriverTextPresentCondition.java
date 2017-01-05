@@ -2,6 +2,7 @@ package com.iselsoft.easyium.waiter.webdriver;
 
 import com.iselsoft.easyium.WebDriver;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoSuchElementException;
 
 public class WebDriverTextPresentCondition extends WebDriverCondition {
     private final String text;
@@ -16,7 +17,7 @@ public class WebDriverTextPresentCondition extends WebDriverCondition {
         try {
             webDriver.seleniumWebDriver().findElement(By.xpath(String.format("//*[contains(., '%s')]", text)));
             return true;
-        } catch (org.openqa.selenium.NoSuchElementException e) {
+        } catch (NoSuchElementException e) {
             return false;
         }
     }

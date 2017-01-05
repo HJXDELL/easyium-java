@@ -2,10 +2,10 @@ package com.iselsoft.easyium.waiter.webdriver;
 
 import com.iselsoft.easyium.WebDriver;
 
-public class WebDriverURLEqualsConditioin extends WebDriverCondition {
+public class WebDriverURLEqualsCondition extends WebDriverCondition {
     private final String url;
 
-    protected WebDriverURLEqualsConditioin(WebDriver webDriver, String url) {
+    protected WebDriverURLEqualsCondition(WebDriver webDriver, String url) {
         super(webDriver);
         this.url = url;
     }
