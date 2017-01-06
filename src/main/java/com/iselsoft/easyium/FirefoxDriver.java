@@ -3,6 +3,7 @@ package com.iselsoft.easyium;
 import org.openqa.selenium.Capabilities;
 import org.openqa.selenium.firefox.FirefoxBinary;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.firefox.GeckoDriverService;
 
 public class FirefoxDriver extends WebDriver {
 
@@ -33,7 +34,11 @@ public class FirefoxDriver extends WebDriver {
     public FirefoxDriver(FirefoxBinary binary, FirefoxProfile profile, Capabilities desiredCapabilities, Capabilities requiredCapabilities) {
         super(new org.openqa.selenium.firefox.FirefoxDriver(binary, profile, desiredCapabilities, requiredCapabilities));
     }
-
+    
+    public FirefoxDriver(GeckoDriverService driverService, Capabilities desiredCapabilities, Capabilities requiredCapabilities) {
+        super(new org.openqa.selenium.firefox.FirefoxDriver(driverService, desiredCapabilities, requiredCapabilities));
+    }
+    
     @Override
     public WebDriverType getWebDriverType() {
         return WebDriverType.FIREFOX;

@@ -1020,26 +1020,25 @@ public abstract class WebDriver extends Context {
      * Get the current network settings of the device.
      * <p><b>Supported by ANDROID</b></p>
      *
-     * @return {@link NetworkConnectionSetting} objects will let you inspect the status
-     * of AirplaneMode, Wifi, Data connections
+     * @return {@link Connection} object will let you inspect the status
+     *     of None, AirplaneMode, Wifi, Data and All connections
      */
-    public NetworkConnectionSetting getNetworkConnection() {
+    public Connection getConnection() {
         checkSupport(WebDriverType.ANDROID);
 
-        return ((HasNetworkConnection) seleniumWebDriver()).getNetworkConnection();
+        return ((HasNetworkConnection) seleniumWebDriver()).getConnection();
     }
 
     /**
      * Set the network connection of the device. This is an Android-only method
      * <p><b>Supported by ANDROID</b></p>
      *
-     * @param connection The NetworkConnectionSetting configuration to use for the
-     *                   device
+     * @param connection The bitmask of the desired connection
      */
-    public void setNetworkConnection(NetworkConnectionSetting connection) {
+    public void setConnection(Connection connection) {
         checkSupport(WebDriverType.ANDROID);
 
-        ((HasNetworkConnection) seleniumWebDriver()).setNetworkConnection(connection);
+        ((HasNetworkConnection) seleniumWebDriver()).setConnection(connection);
     }
 
     /**

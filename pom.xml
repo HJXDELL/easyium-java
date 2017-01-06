@@ -6,7 +6,7 @@
 
     <groupId>com.iselsoft</groupId>
     <artifactId>easyium</artifactId>
-    <version>1.0.2</version>
+    <version>1.0.3</version>
     <packaging>jar</packaging>
 
     <name>easyium</name>
@@ -44,12 +44,12 @@
         <dependency>
             <groupId>org.seleniumhq.selenium</groupId>
             <artifactId>selenium-java</artifactId>
-            <version>2.53.0</version>
+            <version>3.0.1</version>
         </dependency>
         <dependency>
             <groupId>io.appium</groupId>
             <artifactId>java-client</artifactId>
-            <version>3.4.1</version>
+            <version>4.1.2</version>
         </dependency>
     </dependencies>
 
