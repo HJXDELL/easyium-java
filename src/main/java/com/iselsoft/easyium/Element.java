@@ -91,6 +91,22 @@ public abstract class Element extends Context {
     }
 
     /**
+     * Focus this element.
+     */
+    public void focus() {
+        try {
+            try {
+                getWebDriver().executeScript("arguments[0].focus()", this);
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().visible();
+                getWebDriver().executeScript("arguments[0].focus()", this);
+            }
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+    
+    /**
      * Removes keyboard focus from this element.
      */
     public void blur() {
