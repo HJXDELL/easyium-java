@@ -95,12 +95,7 @@ public abstract class Element extends Context {
      */
     public void focus() {
         try {
-            try {
-                getWebDriver().executeScript("arguments[0].focus()", this);
-            } catch (NoSuchElementException | StaleElementReferenceException e) {
-                waitFor().visible();
-                getWebDriver().executeScript("arguments[0].focus()", this);
-            }
+            getWebDriver().executeScript("arguments[0].focus()", this);
         } catch (WebDriverException e) {
             throw new EasyiumException(e.getMessage(), this);
         }
@@ -111,12 +106,7 @@ public abstract class Element extends Context {
      */
     public void blur() {
         try {
-            try {
-                getWebDriver().executeScript("arguments[0].blur()", this);
-            } catch (NoSuchElementException | StaleElementReferenceException e) {
-                waitFor().visible();
-                getWebDriver().executeScript("arguments[0].blur()", this);
-            }
+            getWebDriver().executeScript("arguments[0].blur()", this);
         } catch (WebDriverException e) {
             throw new EasyiumException(e.getMessage(), this);
         }
@@ -349,12 +339,7 @@ public abstract class Element extends Context {
         String content;
 
         try {
-            try {
-                content = (String) getWebDriver().executeScript(String.format("return arguments[0].childNodes[%s].nodeValue", textNodeIndex), this);
-            } catch (NoSuchElementException | StaleElementReferenceException e) {
-                waitFor().exists();
-                content = (String) getWebDriver().executeScript(String.format("return arguments[0].childNodes[%s].nodeValue", textNodeIndex), this);
-            }
+            content = (String) getWebDriver().executeScript(String.format("return arguments[0].childNodes[%s].nodeValue", textNodeIndex), this);
         } catch (WebDriverException e) {
             throw new EasyiumException(e.getMessage(), this);
         }
@@ -437,12 +422,7 @@ public abstract class Element extends Context {
                 "            setSelectionRange(arguments[0], %s, %s);";
 
         try {
-            try {
-                getWebDriver().executeScript(String.format(script, startIndex, endIndex), this);
-            } catch (NoSuchElementException | StaleElementReferenceException e) {
-                waitFor().visible();
-                getWebDriver().executeScript(String.format(script, startIndex, endIndex), this);
-            }
+            getWebDriver().executeScript(String.format(script, startIndex, endIndex), this);
         } catch (WebDriverException e) {
             throw new EasyiumException(e.getMessage(), this);
         }
@@ -453,12 +433,7 @@ public abstract class Element extends Context {
      */
     public String getInnerHTML() {
         try {
-            try {
-                return (String) getWebDriver().executeScript("return arguments[0].innerHTML", this);
-            } catch (NoSuchElementException | StaleElementReferenceException e) {
-                waitFor().exists();
-                return (String) getWebDriver().executeScript("return arguments[0].innerHTML", this);
-            }
+            return (String) getWebDriver().executeScript("return arguments[0].innerHTML", this);
         } catch (WebDriverException e) {
             throw new EasyiumException(e.getMessage(), this);
         }
@@ -480,12 +455,7 @@ public abstract class Element extends Context {
                 "            arguments[0].dispatchEvent(mouseoverEventObj);";
 
         try {
-            try {
-                getWebDriver().executeScript(script, this);
-            } catch (NoSuchElementException | StaleElementReferenceException e) {
-                waitFor().exists();
-                getWebDriver().executeScript(script, this);
-            }
+            getWebDriver().executeScript(script, this);
         } catch (WebDriverException e) {
             throw new EasyiumException(e.getMessage(), this);
         }
@@ -507,12 +477,7 @@ public abstract class Element extends Context {
                 "            arguments[0].dispatchEvent(mouseoutEventObj);";
 
         try {
-            try {
-                getWebDriver().executeScript(script, this);
-            } catch (NoSuchElementException | StaleElementReferenceException e) {
-                waitFor().exists();
-                getWebDriver().executeScript(script, this);
-            }
+            getWebDriver().executeScript(script, this);
         } catch (WebDriverException e) {
             throw new EasyiumException(e.getMessage(), this);
         }
