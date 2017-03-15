@@ -3,6 +3,7 @@ package com.iselsoft.easyium;
 import com.iselsoft.easyium.exceptions.EasyiumException;
 import com.iselsoft.easyium.exceptions.NoSuchElementException;
 import com.iselsoft.easyium.waiter.element.ElementWaitFor;
+import io.appium.java_client.MobileElement;
 import io.appium.java_client.TouchableElement;
 import io.appium.java_client.android.AndroidElement;
 import io.appium.java_client.ios.IOSElement;
@@ -931,19 +932,19 @@ public abstract class Element extends Context {
 
     /**
      * Set the value on this element in the application
-     * <p><b>Supported by IOS</b></p>
+     * <p><b>Supported by MOBILE</b></p>
      *
      * @param value the value to set
      */
     public void setValue(String value) {
-        checkSupport(WebDriverType.IOS);
+        checkSupport(WebDriverType.MOBILE);
 
         try {
             try {
-                ((IOSElement) seleniumElement()).setValue(value);
+                ((MobileElement) seleniumElement()).setValue(value);
             } catch (NoSuchElementException | StaleElementReferenceException e) {
                 waitFor().exists();
-                ((IOSElement) seleniumElement()).setValue(value);
+                ((MobileElement) seleniumElement()).setValue(value);
             }
         } catch (WebDriverException e) {
             throw new EasyiumException(e.getMessage(), this);
