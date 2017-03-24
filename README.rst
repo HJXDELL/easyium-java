@@ -188,6 +188,10 @@ For information and suggestions you can contact me at karl.gong@outlook.com
 
 Change Log
 ----------
+1.0.4 (compared to 1.0.3)
+
+- Add Focus() for Element.
+
 1.0.3 (compared to 1.0.2)
 
 - Depend selenium 3.0.1 and appium 4.1.2.

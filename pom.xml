@@ -6,7 +6,7 @@
 
     <groupId>com.iselsoft</groupId>
     <artifactId>easyium</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
     <packaging>jar</packaging>
 
     <name>easyium</name>
