@@ -32,7 +32,7 @@ In order to start using easyium in your Maven project, just add the following de
   <dependency>
     <groupId>com.iselsoft</groupId>
     <artifactId>easyium</artifactId>
-    <version>1.0.3</version>
+    <version>1.0.4</version>
   </dependency>
 
 Glossary
