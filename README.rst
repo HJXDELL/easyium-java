@@ -32,7 +32,7 @@ In order to start using easyium in your Maven project, just add the following de
   <dependency>
     <groupId>com.iselsoft</groupId>
     <artifactId>easyium</artifactId>
-    <version>1.0.4</version>
+    <version>1.0.5</version>
   </dependency>
 
 Glossary
@@ -188,6 +188,10 @@ For information and suggestions you can contact me at karl.gong@outlook.com
 
 Change Log
 ----------
+1.0.5 (compared to 1.0.5)
+
+- Add RemoteWebDriver and PhantomJSDriver.
+
 1.0.4 (compared to 1.0.3)
 
 - Add Focus() for Element.
