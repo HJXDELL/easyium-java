@@ -291,6 +291,20 @@ public abstract class Element extends Context {
     }
 
     /**
+     * Set the attribute of this element to value.
+     * 
+     * @param name the attribute name
+     * @param value the value to be set
+     */
+    public void setAttribute(String name, String value) {
+        try {
+            getWebDriver().executeScript(String.format("arguments[0].setAttribute('%s', '%s')", name, value), this);
+        } catch (WebDriverException e) {
+            throw new EasyiumException(e.getMessage(), this);
+        }
+    }
+
+    /**
      * Gets the value of this element.
      * Can be used to get the text of a text entry element.
      * Text entry elements are INPUT and TEXTAREA elements.
@@ -442,8 +456,10 @@ public abstract class Element extends Context {
 
     /**
      * Do mouse over this element.
+     * 
+     * @param useNative use the selenium native implementation
      */
-    public void mouseOver() {
+    public void mouseOver(boolean useNative) {
         checkSupport(WebDriverType.BROWSER);
 
         String script = "var mouseoverEventObj = null;\n" +
@@ -454,12 +470,32 @@ public abstract class Element extends Context {
                 "                mouseoverEventObj.initMouseEvent(\"mouseover\", true, true, window, 0, 0, 0, 0, 0, false, false, false, false, 0, null);\n" +
                 "            }\n" +
                 "            arguments[0].dispatchEvent(mouseoverEventObj);";
-
+        
         try {
-            getWebDriver().executeScript(script, this);
+            try {
+                if (useNative) {
+                    getWebDriver().createActions().moveToElement(this.seleniumElement()).perform();
+                } else {
+                    getWebDriver().executeScript(script, this);
+                }
+            } catch (NoSuchElementException | StaleElementReferenceException e) {
+                waitFor().exists();
+                if (useNative) {
+                    getWebDriver().createActions().moveToElement(this.seleniumElement()).perform();
+                } else {
+                    getWebDriver().executeScript(script, this);
+                }
+            }
         } catch (WebDriverException e) {
             throw new EasyiumException(e.getMessage(), this);
         }
+    }
+    
+    /**
+     * Do mouse over this element.
+     */
+    public void mouseOver() {
+        this.mouseOver(false);
     }
 
     /**
